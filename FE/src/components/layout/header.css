@@ -33,3 +33,7 @@
   line-height: normal;
   text-decoration: none;
 }
+
+.header-menu-name.active {
+  color: #ffffff;
+}
