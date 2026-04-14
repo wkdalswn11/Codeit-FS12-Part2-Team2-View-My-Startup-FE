@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import Auth from "./pages/auth/Auth";
 import CompanyList from "./pages/company/list";
 import InvestmentList from "./pages/investment/list";
 import "./styles/table.css";
@@ -12,6 +13,7 @@ function App() {
   return (
     <>
       <Header />
+      <Auth />
       <Routes>
         <Route path="/" element={<CompanyPage />} />
         <Route path="/investments" element={<InvestmentList />} />
