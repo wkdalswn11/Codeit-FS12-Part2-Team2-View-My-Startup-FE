@@ -112,13 +112,11 @@ const Result = () => {
   const sortedList = [...companyList].sort((a, b) => b.revenue - a.revenue);
   return (
     <>
-      <section>
-        <h3>내가 선택한 기업</h3>
-        {/* 기업추가 카드 들어갈 자리 */}
+      {/* <section>
+        기업추가 카드 들어갈 자리
         <CompareCard />
-      </section>
+      </section> */}
       <section>
-        <h3>비교 결과 확인하기</h3>
         <table className="startup-table mb-4">
           <thead className="startup-table-head">
             <tr>
