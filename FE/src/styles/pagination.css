@@ -1,0 +1,67 @@
+:root {
+  /* black */
+  --black-400: #131313;
+  --black-300: #212121;
+  --black-200: #282828;
+  --black-100: #2e2e2e;
+
+  /* gray */
+  --gray-400: #333333;
+  --gray-300: #4b4b4b;
+  --gray-200: #747474;
+  --gray-100: #d8d8d8;
+
+  /* brand */
+  --brand-orange: #eb5230;
+  --brand-blue: #4a90ff;
+  --brand-red: #c41013;
+
+  /* spacing scale (Tailwind mb 기준) */
+  --space-0: 0px;
+  --space-1: 4px; /* mb-1 */
+  --space-2: 8px; /* mb-2 */
+  --space-3: 12px; /* mb-3 */
+  --space-4: 16px; /* mb-4 */
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+
+  /* margin */
+  --mb-1: var(--space-1);
+  --mb-2: var(--space-2);
+  --mb-3: var(--space-3);
+  --mb-4: var(--space-4);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 12px;
+  gap: 8px;
+}
+
+.pagination button {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--gray-gray_200, #747474);
+  background-color: var(--black-100, #2e2e2e);
+}
+
+.pagination button.active {
+  color: #fff;
+  background-color: var(--brand-orange, #eb5230);
+}
