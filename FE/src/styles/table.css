@@ -134,3 +134,7 @@ tbody tr:first-child td:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.startup-table-dummy {
+  height: 20px;
+}
