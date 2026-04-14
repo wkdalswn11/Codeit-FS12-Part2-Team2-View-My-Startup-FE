@@ -1,13 +1,14 @@
 import { useState } from "react";
 import "./App.css";
-import InvestmentList from "./pages/investment/list";
 import "./styles/table.css";
 import Result from "./pages/compare/result";
+import ComparePage from "./pages/compare/ComparePage";
 import Header from "./components/layout/header";
 import CompanyPage from "./pages/company/CompanyPage";
 import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedLayout from "./components/layout/ProtextedLayout";
 import Auth from "./pages/auth/Auth";
+import InvestmentPage from "./pages/investment/InvestmentPage";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
           path="/investments"
           element={
             <ProtectedLayout title="투자 현황">
-              <InvestmentList />
+              <InvestmentPage />
             </ProtectedLayout>
           }
         />
@@ -34,7 +35,8 @@ function App() {
           path="/compare"
           element={
             <ProtectedLayout title="비교 현황">
-              <Result />
+              {/* <Result /> */}
+              <ComparePage />
             </ProtectedLayout>
           }
         />
