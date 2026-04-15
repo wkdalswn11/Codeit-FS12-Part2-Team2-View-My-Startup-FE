@@ -6,6 +6,16 @@ input[type="password"]::-ms-reveal {
     display: none;
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 .modal-overlay {
     position: fixed;
     top: 50%;
@@ -191,4 +201,8 @@ input[type="password"]::-ms-reveal {
     font-weight: 600;
     line-height: normal;
     cursor: pointer;
+}
+
+.is-hidden {
+    display: none;
 }

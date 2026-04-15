@@ -17,8 +17,12 @@ const InputModal = ({ onClose, company }) => {
     }
   };
 
+  const [amount, setAmount] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
+
 
   return (
     <div className="modal-overlay" onClick={handleBackdropClick}>
@@ -51,11 +55,15 @@ const InputModal = ({ onClose, company }) => {
           <p className="form-text">투자자 이름</p>
           <input placeholder="투자자 이름을 입력해 주세요" className="form-input" />
           <p className="form-text">투자 금액</p>
-          <input placeholder="투자 금액을 입력해 주세요" className="form-input" />
+          <input
+            type="number"
+            placeholder="투자 금액을 입력해 주세요"
+            className="form-input"
+          />
           <p className="form-text">투자투자 코멘트</p>
           <textarea placeholder="투자에 대한 코멘트를 입력해 주세요" className="form-textarea" />
 
-          <div className="password-box">
+          <div className="password-box  is-hidden">
             <p className="form-text">비밀번호</p>
             <input
               type={showPassword ? "text" : "password"}
@@ -69,7 +77,7 @@ const InputModal = ({ onClose, company }) => {
             </span>
           </div>
 
-          <div className="password-box">
+          <div className="password-box  is-hidden">
             <p className="form-text">비밀번호 확인</p>
             <input
               type={showConfirm ? "text" : "password"}

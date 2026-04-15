@@ -5,21 +5,26 @@ const SelectCompanyModal = ({ onClose }) => {
   const [recentCompanies, setRecentCompanies] = useState([]);
 
   useEffect(() => {
-    setRecentCompanies([
-      {
-        id: 1,
-        name: "코드잇",
-        categoryName: "에듀테크",
-        logo: "https://via.placeholder.com/40",
-      },
-      {
-        id: 2,
-        name: "스파르타",
-        categoryName: "IT",
-        logo: "https://via.placeholder.com/40",
-      },
-    ]);
+    // TODO: API 엔드포인트 확인 후 활성화
+    // fetchRecentCompanies();
   }, []);
+
+  const fetchRecentCompanies = async () => {
+    try {
+      const res = await fetch("/companies/favorite"); //TODO: 백엔드 API 엔드포인트 확인 후 수정 필요
+
+      if (!res.ok) {
+        console.error("API 응답 실패:", res.status);
+        throw new Error("서버 에러");
+      }
+
+      const data = await res.json();
+
+      setRecentCompanies(data.companies);
+    } catch (err) {
+      console.error("최근 기업 불러오기 실패", err);
+    }
+  };
 
 
   return (
