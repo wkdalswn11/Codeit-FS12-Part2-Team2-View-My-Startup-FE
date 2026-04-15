@@ -1,0 +1,101 @@
+.Button-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  font-style: normal;
+  font-family: Pretendard;
+  text-align: center;
+}
+
+/* Type 설정 */
+.Button-large {
+  padding: 13px 48px;
+  height: 48px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.Button-medium {
+  padding: 8px 24px;
+  height: 48px;
+  border-radius: 24px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.Button-outline {
+  height: 48px;
+  padding: 13px 24px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Variant 설정 */
+.Button-primary {
+  background-color: #eb5230;
+  color: #fff;
+}
+
+.Button-primary-outline {
+  background-color: transparent;
+  border: 1px solid #eb5230;
+  color: #eb5230;
+}
+
+.Button-gray {
+  background-color: #2e2e2e;
+  color: #747474;
+}
+
+.Button-outline-orange {
+  background-color: transparent;
+  border: 1px solid #eb5230;
+  color: #eb5230;
+}
+
+.Button-outline-gray {
+  background-color: transparent;
+  border: 1px solid #747474;
+  color: #747474;
+}
+.Button-outline-white {
+  background-color: transparent;
+  border: 1px solid #d8d8d8;
+  color: #d8d8d8;
+}
+
+.Button-btn:hover {
+  opacity: 0.8;
+}
+
+/* --- 모바일 버전 (767px 이하) --- */
+@media (max-width: 375px) {
+  .Button-large {
+    width: 135px;
+    padding: 13px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .Button-medium {
+    height: 32px;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .Button-outline {
+    width: 73px;
+    height: 32px;
+    padding: 13px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
