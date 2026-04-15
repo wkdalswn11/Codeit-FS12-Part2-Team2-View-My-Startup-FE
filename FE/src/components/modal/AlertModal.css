@@ -1,0 +1,66 @@
+.modal-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 480px;
+    padding: 24px;
+    border-radius: 16px;
+    background: var(--black-black_300, #212121);
+
+    z-index: 999;
+}
+
+
+.modal-close-layout {
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.modal-message {
+    margin-top: 32px;
+    margin-bottom: 24px;
+    padding-top: 8px;
+    font-family: Pretendard;
+    color: #FFF;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: normal;
+}
+
+.modal-button {
+
+    display: block;
+    margin: 0 auto;
+
+    width: 194px;
+    height: 48px;
+    padding: 13px 48px;
+    border-radius: 50px;
+    border: none;
+    background: var(--brand-brand_orange, #EB5230);
+
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    cursor: pointer;
+}

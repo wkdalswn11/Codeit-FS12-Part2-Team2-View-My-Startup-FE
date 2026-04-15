@@ -1,0 +1,150 @@
+.modal-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 999;
+}
+
+.modal-container {
+    width: 496px;
+    padding: 24px;
+    border-radius: 16px;
+    background: var(--black-black_300, #212121);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 16px;
+}
+
+.modal-header h2 {
+    margin: 0;
+
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.modal-close {
+    top: 0px;
+    right: 0px;
+
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+    padding: 12px 12px;
+    margin: 24px 0;
+
+    border-radius: 10px;
+    border: 1px solid var(--gray-gray_200, #747474);
+    background: #212121;
+}
+
+.search-box input {
+    flex: 1;
+
+    background: transparent;
+    border: none;
+    outline: none;
+
+    color: white;
+    font-size: 14px;
+}
+
+.search-search {
+    display: flex;
+    align-items: center;
+}
+
+.recent-section {
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.company-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 12px;
+}
+
+.company-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.company-left img {
+    width: 48.738px;
+    height: 48.738px;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.company-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.company-name {
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.company-category {
+    color: #747474;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.select-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 13px 24px;
+
+    border-radius: 12px;
+    border: 1px solid #EB5230;
+
+    background: transparent;
+    color: #EB5230;
+
+    font-family: Pretendard;
+    font-size: 16px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
