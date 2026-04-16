@@ -3,6 +3,7 @@ import List from "./list";
 import Pagination from "../../components/pagination/Pagination";
 
 const InvestmentPage = () => {
+  const [loading, setLoading] = useState(true);
   const [investmentList, setInvestmentList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [meta, setMeta] = useState({
@@ -14,18 +15,34 @@ const InvestmentPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(
-        `http://localhost:8080/companies?page=${currentPage}&limit=10`,
-      );
+      try {
+        setLoading(true);
 
-      const result = await res.json();
+        const res = await fetch(
+          `http://localhost:8080/companies?page=${currentPage}&limit=10`,
+        );
 
-      setInvestmentList(result.data || []);
-      setMeta(result.meta || {});
+        if (!res.ok) {
+          throw new Error(`API 오류: ${res.status}`);
+        }
+
+        const result = await res.json();
+
+        setInvestmentList(result.data || []);
+        setMeta(result.meta || {});
+      } catch (err) {
+        console.error("데이터 조회 실패:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchData();
   }, [currentPage]);
+
+  if (loading) {
+    return <div style={{ color: "red" }}>로딩 중...</div>;
+  }
 
   return (
     <>

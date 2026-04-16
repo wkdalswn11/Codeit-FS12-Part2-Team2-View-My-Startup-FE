@@ -34,6 +34,14 @@ const Detail = () => {
           ),
         ]);
 
+        if (!companyRes.ok) {
+          throw new Error(`회사 API 오류: ${companyRes.status}`);
+        }
+
+        if (!investmentRes.ok) {
+          throw new Error(`투자 API 오류: ${investmentRes.status}`);
+        }
+
         const companyData = await companyRes.json();
         const investmentData = await investmentRes.json();
 
