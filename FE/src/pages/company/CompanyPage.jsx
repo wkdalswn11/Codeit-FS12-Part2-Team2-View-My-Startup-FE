@@ -15,16 +15,24 @@ const CompanyPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(
-        `http://localhost:8080/companies?page=${currentPage}&limit=10`,
-      );
-      const result = await res.json();
+      try {
+        const res = await fetch(
+          `http://localhost:8080/companies?page=${currentPage}&limit=10`,
+        );
 
-      setCompanyList(result.data || []);
-      setMeta(result.meta || {});
+        if (!res.ok) {
+          throw new Error(`API 오류: ${res.status}`);
+        }
 
-      console.log(companyList);
+        const result = await res.json();
+
+        setCompanyList(result.data || []);
+        setMeta(result.meta || {});
+      } catch (err) {
+        console.error("회사 목록 조회 실패:", err);
+      }
     };
+
     fetchData();
   }, [currentPage]);
 
