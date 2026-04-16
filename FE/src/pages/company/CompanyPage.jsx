@@ -4,6 +4,7 @@ import Pagination from "../../components/pagination/Pagination";
 import "../../styles/pagination.css";
 
 const CompanyPage = () => {
+  const [loading, setLoading] = useState(true);
   const [companyList, setCompanyList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [meta, setMeta] = useState({
@@ -15,18 +16,34 @@ const CompanyPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(
-        `http://localhost:8080/companies?page=${currentPage}&limit=10`,
-      );
-      const result = await res.json();
+      try {
+        setLoading(true);
 
-      setCompanyList(result.data || []);
-      setMeta(result.meta || {});
+        const res = await fetch(
+          `http://localhost:8080/companies?page=${currentPage}&limit=10`,
+        );
 
-      console.log(companyList);
+        if (!res.ok) {
+          throw new Error(`API 오류: ${res.status}`);
+        }
+
+        const result = await res.json();
+
+        setCompanyList(result.data || []);
+        setMeta(result.meta || {});
+      } catch (err) {
+        console.error("회사 목록 조회 실패:", err);
+      } finally {
+        setLoading(false);
+      }
     };
+
     fetchData();
   }, [currentPage]);
+
+  if (loading) {
+    return <div style={{ color: "red" }}>로딩 중...</div>;
+  }
 
   return (
     <>

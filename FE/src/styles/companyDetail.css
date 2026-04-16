@@ -177,6 +177,17 @@
   color: #d1d1d1;
 }
 
+.empty-investment {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  padding: 26px 20px;
+  border-bottom: 1px solid #2a2a2a;
+  background: var(--black-black_200, #212121);
+  font-size: 17px;
+  color: #f1f1f1;
+}
+
 @media (max-width: 1024px) {
   .detail-summary {
     grid-template-columns: 1fr;
