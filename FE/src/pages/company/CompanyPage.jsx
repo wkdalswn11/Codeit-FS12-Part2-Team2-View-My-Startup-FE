@@ -22,6 +22,8 @@ const CompanyPage = () => {
 
       setCompanyList(result.data || []);
       setMeta(result.meta || {});
+
+      console.log(companyList);
     };
     fetchData();
   }, [currentPage]);

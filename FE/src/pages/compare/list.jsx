@@ -31,7 +31,7 @@ const List = ({ compareList }) => {
             </td>
 
             <td className="desc-cell">{compare.description}</td>
-            <td>{compare.categoryName || "-"}</td>
+            <td>{compare.category || "-"}</td>
             <td>나의 기업 선택 횟수</td>
             <td>비교 기업 선택 횟수</td>
           </tr>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const List = ({ companyList }) => {
   return (
@@ -28,11 +29,13 @@ const List = ({ companyList }) => {
                 alt={company.name}
                 className="company-logo"
               />
-              <span>{company.name}</span>
+              <span>
+                <Link to={`/companies/${company.id}`}>{company.name}</Link>
+              </span>
             </td>
 
             <td className="desc-cell">{company.description}</td>
-            <td>{company.categoryName || "-"}</td>
+            <td>{company.category || "-"}</td>
             <td>{company.totalInvestment?.toLocaleString() || 0}원</td>
             <td>{company.revenue?.toLocaleString() || 0}원</td>
             <td>{company.employeeCount || 0}명</td>

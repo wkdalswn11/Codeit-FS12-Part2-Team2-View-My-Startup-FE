@@ -36,7 +36,7 @@ const List = ({ investmentList }) => {
 
               <td className="desc-cell">{investment.description}</td>
 
-              <td>{investment.categoryName}</td>
+              <td>{investment.category}</td>
 
               <td>View My Startup 투자 금액 원</td>
 
