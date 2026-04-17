@@ -40,7 +40,7 @@ const List = ({ investmentList }) => {
 
               <td>View My Startup 투자 금액 원</td>
 
-              <td>{investment.totalInvestment.toLocaleString()}원</td>
+              <td>{investment?.totalInvestment?.toLocaleString()}원</td>
             </tr>
           ))}
         </tbody>
