@@ -17,25 +17,31 @@ const List = ({ compareList }) => {
         <tr className="startup-table-dummy"></tr>
       </tbody>
       <tbody className="startup-table-body">
-        {compareList.map((compare) => (
-          <tr key={compare.id} className="startup-table-row">
-            <td>{compare.rank}위</td>
-
-            <td className="company-cell">
-              <img
-                src={compare.logo || "https://placehold.co/50"}
-                alt={compare.name}
-                className="company-logo"
-              />
-              <span>{compare.name}</span>
-            </td>
-
-            <td className="desc-cell">{compare.description}</td>
-            <td>{compare.category || "-"}</td>
-            <td>나의 기업 선택 횟수</td>
-            <td>비교 기업 선택 횟수</td>
+        {compareList?.length === 0 ? (
+          <tr>
+            <td colSpan="6">조건에 맞는 결과가 없습니다</td>
           </tr>
-        ))}
+        ) : (
+          compareList.map((compare) => (
+            <tr key={compare.id} className="startup-table-row">
+              <td>{compare.rank}위</td>
+
+              <td className="company-cell">
+                <img
+                  src={compare.logo || "https://placehold.co/50"}
+                  alt={compare.name}
+                  className="company-logo"
+                />
+                <span>{compare.name}</span>
+              </td>
+
+              <td className="desc-cell">{compare.description}</td>
+              <td>{compare.category || "-"}</td>
+              <td>{compare.favoriteCount}</td>
+              <td>{compare.compareCount}</td>
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   );
