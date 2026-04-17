@@ -15,14 +15,6 @@ function SearchBar({ value, onChange, onSubmit }) {
           }
         }}
       />
-
-      {/* <button
-        type="button"
-        className="layout-search-icon"
-        onClick={() => onSubmit?.()}
-      >
-        🔍
-      </button> */}
       <span className="layout-search-icon">🔍</span>
     </div>
   );

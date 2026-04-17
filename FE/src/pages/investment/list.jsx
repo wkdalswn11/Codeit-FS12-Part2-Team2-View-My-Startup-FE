@@ -21,28 +21,34 @@ const List = ({ investmentList }) => {
           <tr className="startup-table-dummy"></tr>
         </tbody>
         <tbody className="startup-table-body">
-          {sortedList.map((investment) => (
-            <tr key={investment.id} className="startup-table-row">
-              <td>{investment.rank}위</td>
-
-              <td className="company-cell">
-                <img
-                  src={investment.logo || "https://placehold.co/50"}
-                  alt={investment.name}
-                  className="company-logo"
-                />
-                <span>{investment.name}</span>
-              </td>
-
-              <td className="desc-cell">{investment.description}</td>
-
-              <td>{investment.category}</td>
-
-              <td>{investment?.siteInvestment?.toLocaleString()} 원</td>
-
-              <td>{investment?.baseInvestment?.toLocaleString()} 원</td>
+          {sortedList?.length === 0 ? (
+            <tr>
+              <td colSpan="6">조건에 맞는 결과가 없습니다</td>
             </tr>
-          ))}
+          ) : (
+            sortedList.map((investment) => (
+              <tr key={investment.id} className="startup-table-row">
+                <td>{investment.rank}위</td>
+
+                <td className="company-cell">
+                  <img
+                    src={investment.logo || "https://placehold.co/50"}
+                    alt={investment.name}
+                    className="company-logo"
+                  />
+                  <span>{investment.name}</span>
+                </td>
+
+                <td className="desc-cell">{investment.description}</td>
+
+                <td>{investment.category}</td>
+
+                <td>{investment?.siteInvestment?.toLocaleString()} 원</td>
+
+                <td>{investment?.baseInvestment?.toLocaleString()} 원</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </>
