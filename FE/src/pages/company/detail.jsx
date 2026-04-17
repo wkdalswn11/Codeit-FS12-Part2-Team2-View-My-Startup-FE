@@ -119,7 +119,7 @@ const Detail = () => {
         </div>
 
         <h3 className="detail-investment-total">
-          {companyDetail.siteInvestment} 원
+          총 {companyDetail?.siteInvestment?.toLocaleString()} 원
         </h3>
 
         {/* 테이블 헤더 */}
