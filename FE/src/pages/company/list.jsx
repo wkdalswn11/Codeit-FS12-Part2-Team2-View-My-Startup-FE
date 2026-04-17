@@ -36,7 +36,7 @@ const List = ({ companyList }) => {
 
             <td className="desc-cell">{company.description}</td>
             <td>{company.category || "-"}</td>
-            <td>{company.totalInvestment?.toLocaleString() || 0}원</td>
+            <td>{company.baseInvestment?.toLocaleString() || 0}원</td>
             <td>{company.revenue?.toLocaleString() || 0}원</td>
             <td>{company.employeeCount || 0}명</td>
           </tr>

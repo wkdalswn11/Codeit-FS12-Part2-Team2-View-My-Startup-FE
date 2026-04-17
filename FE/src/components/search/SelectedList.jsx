@@ -1,35 +1,35 @@
 import React, { useState } from "react";
-import "./SelectedList.css";
+import "../../styles/SelectedList.css";
 
 // 상수로 옵션 리스트 정의 (컴포넌트 밖에서 관리)
 const SORT_VARIANTS = {
   INVESTMENT: [
-    { label: "누적 투자금액 높은순", value: "investment_desc" },
-    { label: "누적 투자금액 낮은순", value: "investment_asc" },
+    { label: "누적 투자금액 높은순", value: "baseInvestment_desc" },
+    { label: "누적 투자금액 낮은순", value: "baseInvestment_asc" },
     { label: "매출액 높은순", value: "revenue_desc" },
     { label: "매출액 낮은순", value: "revenue_asc" },
-    { label: "고용 인원 많은순", value: "employee_desc" },
-    { label: "고용 인원 적은순", value: "employee_asc" },
+    { label: "고용 인원 많은순", value: "employeeCount_desc" },
+    { label: "고용 인원 적은순", value: "employeeCount_asc" },
   ],
   MY_SELECTION: [
-    { label: "나의 기업 선택 횟수 높은순", value: "selection_desc" },
-    { label: "나의 기업 선택 횟수 낮은순", value: "selection_asc" },
-    { label: "실제 누적 투자 금액 높은순", value: "actual_invest_desc" },
-    { label: "실제 누적 투자 금액 낮은순", value: "actual_invest_asc" },
+    { label: "나의 기업 선택 횟수 높은순", value: "favoriteCount_desc" },
+    { label: "나의 기업 선택 횟수 낮은순", value: "favoriteCount_asc" },
+    { label: "비교 기업 선택 횟수 높은순", value: "compareCount_desc" },
+    { label: "비교 기업 선택 횟수 낮은순", value: "compareCount_asc" },
   ],
   VIEW_MY_STARTUP: [
     {
       label: "View My Startup 투자 금액 높은순",
-      value: "view_investment_desc",
+      value: "siteInvestment_desc",
     },
-    { label: "View My Startup 투자 금액 낮은순", value: "view_investment_asc" },
+    { label: "View My Startup 투자 금액 낮은순", value: "siteInvestment_asc" },
     {
       label: "실제 누적 투자 금액 높은순",
-      value: "actual_total_investment_desc",
+      value: "baseInvestment_desc",
     },
     {
       label: "실제 누적 투자 금액 낮은순",
-      value: "actual_total_investment_asc",
+      value: "baseInvestment_asc",
     },
   ],
 };
