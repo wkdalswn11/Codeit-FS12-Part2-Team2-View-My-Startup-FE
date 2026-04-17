@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import CompanyCard from "../../components/card/CompanyCard";
 import "../../styles/companyDetail.css";
 import Button from "../../components/ui/Button";
 import Pagination from "../../components/pagination/Pagination";

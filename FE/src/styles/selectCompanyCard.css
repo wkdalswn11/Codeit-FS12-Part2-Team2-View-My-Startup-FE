@@ -1,0 +1,79 @@
+.select-company-card {
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #2a2a2a;
+  border-radius: 14px;
+  background: #212121;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.select-company-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.select-company-card-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #2e2e2e;
+}
+
+.select-company-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.select-company-card-category {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8f8f8f;
+}
+
+.select-company-card-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.select-company-card-description {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #d8d8d8;
+  word-break: keep-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .select-company-card {
+    padding: 16px;
+  }
+
+  .select-company-card-logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .select-company-card-title {
+    font-size: 18px;
+  }
+
+  .select-company-card-description {
+    font-size: 13px;
+  }
+}
