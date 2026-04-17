@@ -1,8 +1,33 @@
 import { useEffect, useState } from "react";
 import "./SelectCompanyModal.css";
 
-const SelectCompanyModal = ({ onClose }) => {
+const SelectCompanyModal = ({ onClose, onSelect }) => {
   const [recentCompanies, setRecentCompanies] = useState([]);
+
+  useEffect(() => {
+    const mockData = [
+      {
+        id: 1,
+        name: "코드잇",
+        categoryName: "에듀테크",
+        logo: "https://via.placeholder.com/40?text=C",
+      },
+      {
+        id: 2,
+        name: "토스",
+        categoryName: "핀테크",
+        logo: "https://via.placeholder.com/40?text=T",
+      },
+      {
+        id: 3,
+        name: "카카오",
+        categoryName: "IT",
+        logo: "https://via.placeholder.com/40?text=K",
+      },
+    ];
+
+    setRecentCompanies(mockData);
+  }, []);
 
   useEffect(() => {
     // TODO: API 엔드포인트 확인 후 활성화
@@ -69,7 +94,12 @@ const SelectCompanyModal = ({ onClose }) => {
                 </div>
               </div>
 
-              <button className="select-btn">선택하기</button>
+              <button
+                className="select-btn"
+                onClick={() => onSelect(company)}
+              >
+                선택하기
+              </button>
             </div>
           ))}
         </div>
