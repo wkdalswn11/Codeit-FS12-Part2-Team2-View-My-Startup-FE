@@ -16,7 +16,7 @@ function App() {
     <>
       <Header />
       <Routes>
-        <Routez
+        <Route
           path="/"
           element={
             <ProtectedLayout title="전체 스타트업 목록">

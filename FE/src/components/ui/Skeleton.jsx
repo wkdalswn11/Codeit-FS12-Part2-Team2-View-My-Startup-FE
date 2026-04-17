@@ -1,7 +1,7 @@
-import React from "react";
+import "../../styles/skeleton.css";
 
-const Skeleton = () => {
-  return <div>Skeleton</div>;
-};
+function Skeleton({ className = "" }) {
+  return <div className={`skeleton ${className}`}></div>;
+}
 
 export default Skeleton;

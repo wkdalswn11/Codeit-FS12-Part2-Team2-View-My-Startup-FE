@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import List from "./list";
 import Pagination from "../../components/pagination/Pagination";
+import ListSkeleton from "../../components/ui/ListSkeleton";
 
 const InvestmentPage = () => {
   const [loading, setLoading] = useState(true);
@@ -41,7 +42,7 @@ const InvestmentPage = () => {
   }, [currentPage]);
 
   if (loading) {
-    return <div style={{ color: "red" }}>로딩 중...</div>;
+    return <ListSkeleton />;
   }
 
   return (

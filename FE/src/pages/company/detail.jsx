@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import "../../styles/companyDetail.css";
 import Button from "../../components/ui/Button";
 import Pagination from "../../components/pagination/Pagination";
+import DetailSkeleton from "../../components/ui/DetailSkeleton";
 
 const Detail = () => {
   const [loading, setLoading] = useState(true);
@@ -62,7 +63,7 @@ const Detail = () => {
   }, [id, currentPage]);
 
   if (loading) {
-    return <div style={{ color: "red" }}>로딩 중...</div>;
+    return <DetailSkeleton />;
   }
 
   return (
@@ -118,7 +119,7 @@ const Detail = () => {
         </div>
 
         <h3 className="detail-investment-total">
-          {companyDetail.siteInvestment} 원
+          총 {companyDetail?.siteInvestment?.toLocaleString()} 원
         </h3>
 
         {/* 테이블 헤더 */}
