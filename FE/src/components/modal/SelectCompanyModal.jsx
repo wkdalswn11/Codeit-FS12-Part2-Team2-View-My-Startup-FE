@@ -1,53 +1,41 @@
 import { useEffect, useState } from "react";
 import "./SelectCompanyModal.css";
 
+const USER_ID = 1;
+
 const SelectCompanyModal = ({ onClose, onSelect }) => {
   const [recentCompanies, setRecentCompanies] = useState([]);
 
   useEffect(() => {
-    const mockData = [
-      {
-        id: 1,
-        name: "코드잇",
-        categoryName: "에듀테크",
-        logo: "https://via.placeholder.com/40?text=C",
-      },
-      {
-        id: 2,
-        name: "토스",
-        categoryName: "핀테크",
-        logo: "https://via.placeholder.com/40?text=T",
-      },
-      {
-        id: 3,
-        name: "카카오",
-        categoryName: "IT",
-        logo: "https://via.placeholder.com/40?text=K",
-      },
-    ];
-
-    setRecentCompanies(mockData);
-  }, []);
-
-  useEffect(() => {
-    // TODO: API 엔드포인트 확인 후 활성화
-    // fetchRecentCompanies();
+    fetchRecentCompanies();
   }, []);
 
   const fetchRecentCompanies = async () => {
     try {
-      const res = await fetch("/companies/favorite"); //TODO: 백엔드 API 엔드포인트 확인 후 수정 필요
+      const res = await fetch(`/users/${USER_ID}/favorites`);
 
-      if (!res.ok) {
-        console.error("API 응답 실패:", res.status);
-        throw new Error("서버 에러");
-      }
+      if (!res.ok) throw new Error("조회 실패");
 
       const data = await res.json();
-
       setRecentCompanies(data.companies);
     } catch (err) {
-      console.error("최근 기업 불러오기 실패", err);
+      console.error(err);
+    }
+  };
+
+  const handleSelect = async (company) => {
+    try {
+      await fetch(`/users/${USER_ID}/favorites`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ companyId: company.id }),
+      });
+
+      onSelect(company);
+    } catch (err) {
+      console.error(err);
     }
   };
 
