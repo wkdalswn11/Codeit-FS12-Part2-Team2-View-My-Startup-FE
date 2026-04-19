@@ -1,12 +1,9 @@
-import { useState } from "react";
 import "./App.css";
 import "./styles/table.css";
-import Result from "./pages/compare/result";
 import ComparePage from "./pages/compare/ComparePage";
 import Header from "./components/layout/header";
 import CompanyPage from "./pages/company/CompanyPage";
-import { Routes, Route, Navigate } from "react-router-dom";
-import ProtectedLayout from "./components/layout/ProtextedLayout";
+import { Routes, Route } from "react-router-dom";
 import Auth from "./pages/auth/Auth";
 import InvestmentPage from "./pages/investment/InvestmentPage";
 import Detail from "./pages/company/detail";
@@ -16,39 +13,10 @@ function App() {
     <>
       <Header />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedLayout title="전체 스타트업 목록">
-              <CompanyPage />
-            </ProtectedLayout>
-          }
-        />
-        <Route
-          path="/investments"
-          element={
-            <ProtectedLayout title="투자 현황">
-              <InvestmentPage />
-            </ProtectedLayout>
-          }
-        />
-        <Route
-          path="/compare"
-          element={
-            <ProtectedLayout title="비교 현황">
-              {/* <Result /> */}
-              <ComparePage />
-            </ProtectedLayout>
-          }
-        />
-        <Route
-          path="/companies/:id"
-          element={
-            <ProtectedLayout title="기업 상세">
-              <Detail />
-            </ProtectedLayout>
-          }
-        />
+        <Route path="/" element={<CompanyPage />} />
+        <Route path="/investments" element={<InvestmentPage />} />
+        <Route path="/compare" element={<ComparePage />} />
+        <Route path="/companies/:id" element={<Detail />} />
         <Route path="/auth" element={<Auth />} />
       </Routes>
     </>

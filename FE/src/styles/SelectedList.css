@@ -1,0 +1,83 @@
+.SelectedList-container {
+  position: relative;
+  display: inline-block;
+  min-width: 168px;
+  padding: 12px 16px;
+  font-family: Pretendard;
+  font-size: 14px;
+  color: #d8d8d8;
+}
+
+.SelectedList-box {
+  background-color: #131313;
+  border: 1px solid #747474;
+  padding: 12px 16px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.SelectedList-box:hover {
+  border-color: #666;
+}
+
+.SelectedList-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 8px;
+  background-color: #131313;
+  border: 1px solid #747474;
+  border-radius: 10px;
+  list-style: none;
+  padding: 0;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.SelectedList-list li {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #131313;
+  text-align: center;
+}
+
+.SelectedList-list li:last-child {
+  border-bottom: none;
+}
+
+.SelectedList-list li:hover {
+  background-color: #747474;
+}
+
+@media (max-width: 375px) {
+  .SelectedList-container {
+    min-width: 146px;
+    width: 100%;
+  }
+  .SelectedList-box {
+    padding: 10px 14px;
+    height: 38px;
+  }
+  .SelectedList-list {
+    position: absolute;
+    top: 100%;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin-top: 4px;
+
+    border: 1px solid #747474;
+    border-radius: 10px;
+  }
+
+  .SelectedList-list li {
+    padding: 14px 16px;
+    font-size: 14px;
+    text-align: center;
+  }
+}

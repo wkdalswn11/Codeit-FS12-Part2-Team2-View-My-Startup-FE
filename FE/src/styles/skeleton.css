@@ -1,0 +1,139 @@
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.4s infinite linear;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-text {
+  width: 100%;
+  height: 1em;
+}
+
+.skeleton-text-sm {
+  width: 60%;
+  height: 1em;
+}
+
+.skeleton-text-lg {
+  width: 80%;
+  height: 1.2em;
+}
+
+.detail-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.detail-skeleton-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.detail-skeleton-title {
+  width: 60%;
+  min-width: 180px;
+  height: 1.6em;
+}
+
+.detail-skeleton-category {
+  width: 40%;
+  min-width: 100px;
+  height: 1.2em;
+}
+
+.detail-skeleton-section-title {
+  width: 35%;
+  max-width: 200px;
+  height: 1.2em;
+}
+
+.detail-skeleton-card-label {
+  width: 40%;
+  height: 1em;
+}
+
+.detail-skeleton-card-value {
+  width: 50%;
+  height: 1.5em;
+}
+
+.detail-skeleton-line {
+  width: 100%;
+  height: 0.9em;
+}
+
+.detail-skeleton-line-short {
+  width: 70%;
+}
+
+.detail-skeleton-button {
+  width: 150px;
+  max-width: 100%;
+  height: 52px;
+  border-radius: 999px;
+}
+
+.detail-skeleton-total {
+  width: 40%;
+  height: 1.6em;
+  margin: 20px 0;
+}
+
+.detail-skeleton-table-text {
+  width: 60%;
+  height: 1em;
+}
+
+.detail-skeleton-name {
+  width: 80%;
+}
+
+.detail-skeleton-rank {
+  width: 40%;
+}
+
+.detail-skeleton-amount {
+  width: 60%;
+}
+
+.detail-skeleton-comment {
+  width: 95%;
+}
+
+* 타입별 */ .skeleton.text {
+  height: 1em;
+}
+
+.skeleton.short {
+  width: 40%;
+}
+
+.skeleton.medium {
+  width: 60%;
+}
+
+.skeleton.long {
+  width: 90%;
+}
+
+.skeleton.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}

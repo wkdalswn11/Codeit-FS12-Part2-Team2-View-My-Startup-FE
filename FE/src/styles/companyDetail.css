@@ -43,59 +43,6 @@
   margin-top: 28px;
 }
 
-.detail-card {
-  display: flex;
-  padding: 36px 24px;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 10px;
-  background: #282828;
-}
-
-.detail-card-label {
-  font-size: 20px;
-  font-weight: 500;
-  color: #d1d1d1;
-}
-
-.detail-card-value {
-  font-size: 32px;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.detail-description {
-  margin-top: 24px;
-  padding: 28px;
-  border-radius: 16px;
-  background: #1a1a1a;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-}
-
-.detail-section-title {
-  color: #fff;
-  font-family: Pretendard;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-}
-
-.detail-description-text {
-  margin: 0;
-  white-space: pre-line;
-  line-height: 1.8;
-  color: #d8d8d8;
-  font-family: Pretendard;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-}
-
 .detail-investment {
   margin-top: 40px;
 }
@@ -105,23 +52,6 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
-}
-
-.detail-invest-button {
-  min-width: 150px;
-  height: 52px;
-  padding: 0 24px;
-  border: none;
-  border-radius: 999px;
-  background: #f35b2f;
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.detail-invest-button:hover {
-  opacity: 0.9;
 }
 
 .detail-investment-total {
@@ -177,6 +107,16 @@
   color: #d1d1d1;
 }
 
+.empty-investment {
+  padding: 32px 20px;
+  border-radius: 8px;
+  background: #212121;
+  color: #b5b5b5;
+  text-align: center;
+  font-size: 16px;
+  border: 1px solid #2a2a2a;
+}
+
 @media (max-width: 1024px) {
   .detail-summary {
     grid-template-columns: 1fr;
@@ -194,8 +134,11 @@
 
 @media (max-width: 768px) {
   .detail-header {
-    flex-direction: column;
-    align-items: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 32px 0 24px;
+    border-bottom: 1px solid #2a2a2a;
   }
 
   .detail-title {
@@ -215,7 +158,12 @@
   }
 
   .detail-section-title {
-    font-size: 24px;
+    margin: 0;
+    color: #ffffff;
+    font-family: Pretendard;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
   }
 
   .detail-description-text {
