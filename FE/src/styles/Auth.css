@@ -1,0 +1,224 @@
+.company-card-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 36px 24px;
+  border-radius: 10px;
+  background: #282828;
+}
+
+.company-card-label {
+  font-size: 20px;
+  font-weight: 500;
+  color: #d1d1d1;
+}
+
+.company-card-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.company-card-description {
+  margin-top: 24px;
+  padding: 28px;
+  border-radius: 16px;
+  background: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.company-card-section-title {
+  margin: 0;
+  color: #ffffff;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.company-card-description-text {
+  margin: 0;
+  white-space: pre-line;
+  color: #d8d8d8;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+@media (max-width: 1024px) {
+  .company-card-summary {
+    min-height: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .company-card-label {
+    font-size: 16px;
+  }
+
+  .company-card-value {
+    font-size: 24px;
+  }
+
+  .company-card-section-title {
+    font-size: 20px;
+  }
+
+  .company-card-description-text {
+    font-size: 16px;
+  }
+}
+
+/* 로그인,회원가입 css 급한대로 수정 */
+
+input::placeholder {
+  color: #888;
+  font-size: 14px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #e05a3a !important;
+}
+
+.auth-page {
+  min-height: 100vh;
+  background: #111111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Noto Sans KR", sans-serif;
+  padding: 40px 16px;
+}
+
+.auth-card {
+  width: 496px;
+  min-height: 370px;
+  background: #1e1e1e;
+  border-radius: 12px;
+  padding: 32px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: left;
+}
+
+.auth-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.auth-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.auth-input {
+  padding: 12px 14px;
+  background: #111111;
+  border: 1.5px solid #747474;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-family: "Noto Sans KR", sans-serif;
+  transition: border-color 0.2s;
+}
+
+.auth-input-error {
+  border-color: #c41013;
+}
+
+.auth-error-text {
+  font-size: 13px;
+  color: #c41013;
+  margin-top: 2px;
+}
+
+.auth-btn-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+  width: 100%;
+}
+
+.auth-btn {
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.auth-btn-outline {
+  padding: 10px 40px;
+  background: transparent;
+  border: 1.5px solid #eb5230;
+  color: #eb5230;
+}
+
+.auth-btn-fill {
+  padding: 10px 36px;
+  background: #eb5230;
+  border: 1.5px solid #eb5230;
+  color: #fff;
+}
+
+.auth-btn-fill-center {
+  padding: 10px 40px;
+  background: transparent;
+  border: 1.5px solid #eb5230;
+  color: #eb5230;
+}
+
+.auth-btn-outline:hover {
+  background: rgba(235, 82, 48, 0.08);
+}
+
+.auth-btn-fill:hover {
+  background: #d94a28;
+  border-color: #d94a28;
+}
+
+.auth-btn-fill-center:hover {
+  background: rgba(235, 82, 48, 0.08);
+}
+
+@media (max-width: 768px) {
+  .auth-page {
+    padding: 24px 16px;
+  }
+
+  .auth-card {
+    width: 100%;
+    min-height: auto;
+    padding: 24px 20px;
+  }
+
+  .auth-btn-row {
+    flex-direction: column;
+  }
+
+  .auth-btn-outline,
+  .auth-btn-fill,
+  .auth-btn-fill-center {
+    width: 100%;
+  }
+}

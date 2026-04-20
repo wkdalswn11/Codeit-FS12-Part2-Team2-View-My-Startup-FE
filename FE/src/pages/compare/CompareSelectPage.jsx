@@ -55,9 +55,7 @@ const CompareSelectPage = () => {
                   선택 취소
                 </button>
 
-                <div className="companyCircle">
-                  {myCompany.name.charAt(0)}
-                </div>
+                <div className="companyCircle">{myCompany.name.charAt(0)}</div>
 
                 <p>{myCompany.name}</p>
                 <span>{myCompany.categoryName}</span>
@@ -81,9 +79,7 @@ const CompareSelectPage = () => {
                 </div>
               </div>
 
-              <button className="compareBtn">
-                기업 비교하기
-              </button>
+              <button className="compareBtn">기업 비교하기</button>
             </>
           )}
 
