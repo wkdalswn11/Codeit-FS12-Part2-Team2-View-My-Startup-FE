@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AlertModal from "../../components/modal/AlertModal";
 import "../../styles/Auth.css";
+import { loginUser, signupUser } from "../../services/userApi";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const LS_KEY = "mystartup_user";
@@ -25,7 +26,8 @@ export default function Auth({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
+  const [isSignupSuccess, setIsSignupSuccess] = useState(false);
 
   const nameRef = useRef(null);
   const emailRef = useRef(null);
@@ -65,7 +67,7 @@ export default function Auth({ onLoginSuccess }) {
       return false;
     }
 
-    if (!EMAIL_REGEX.test(email)) {
+    if (!EMAIL_REGEX.test(email.trim())) {
       setEmailError("올바른 이메일 형식이 아닙니다.");
       emailRef.current?.focus();
       return false;
@@ -74,27 +76,53 @@ export default function Auth({ onLoginSuccess }) {
     return true;
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!validate()) return;
 
-    const user = { name: name.trim(), email: email.trim() };
-    saveUser(user);
-    onLoginSuccess?.(user);
-    setSuccessMessage("로그인이 됐습니다.");
+    try {
+      const result = await loginUser({
+        name: name.trim(),
+        email: email.trim(),
+      });
+
+      saveUser(result.data);
+      onLoginSuccess?.(result.data);
+      setIsSignupSuccess(false);
+      setModalMessage("로그인이 완료됐습니다.");
+    } catch (error) {
+      setIsSignupSuccess(false);
+      setModalMessage(error.message);
+    }
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (!validate()) return;
 
-    const user = { name: name.trim(), email: email.trim() };
-    saveUser(user);
-    onLoginSuccess?.(user);
-    setSuccessMessage("회원가입이 됐습니다.");
+    try {
+      await signupUser({
+        name: name.trim(),
+        email: email.trim(),
+      });
+
+      setIsSignupSuccess(true);
+      setModalMessage("회원가입이 완료됐습니다.");
+    } catch (error) {
+      setIsSignupSuccess(false);
+      setModalMessage(error.message);
+    }
   };
 
-  const handleSuccessModalClose = () => {
-    setSuccessMessage("");
-    navigate(redirectPath, { replace: true });
+  const handleModalClose = () => {
+    setModalMessage("");
+
+    if (isSignupSuccess) {
+      setMode("login");
+      setName("");
+      setEmail("");
+      clearErrors();
+    } else if (mode === "login") {
+      navigate(redirectPath, { replace: true });
+    }
   };
 
   return (
@@ -171,10 +199,11 @@ export default function Auth({ onLoginSuccess }) {
           )}
         </div>
       </div>
+
       <AlertModal
-        isOpen={Boolean(successMessage)}
-        message={successMessage}
-        onClose={handleSuccessModalClose}
+        isOpen={Boolean(modalMessage)}
+        message={modalMessage}
+        onClose={handleModalClose}
       />
     </div>
   );
