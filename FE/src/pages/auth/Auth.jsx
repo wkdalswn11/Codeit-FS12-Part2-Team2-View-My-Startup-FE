@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import AlertModal from "../../components/modal/AlertModal";
 import "../../styles/Auth.css";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,9 +25,13 @@ export default function Auth({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const nameRef = useRef(null);
   const emailRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const redirectPath = location.state?.from?.pathname || "/";
 
   useEffect(() => {
     const user = getStoredUser();
@@ -70,16 +76,25 @@ export default function Auth({ onLoginSuccess }) {
 
   const handleConfirm = () => {
     if (!validate()) return;
+
     const user = { name: name.trim(), email: email.trim() };
     saveUser(user);
     onLoginSuccess?.(user);
+    setSuccessMessage("로그인이 됐습니다.");
   };
 
   const handleSignup = () => {
     if (!validate()) return;
+
     const user = { name: name.trim(), email: email.trim() };
     saveUser(user);
     onLoginSuccess?.(user);
+    setSuccessMessage("회원가입이 됐습니다.");
+  };
+
+  const handleSuccessModalClose = () => {
+    setSuccessMessage("");
+    navigate(redirectPath, { replace: true });
   };
 
   return (
@@ -156,6 +171,11 @@ export default function Auth({ onLoginSuccess }) {
           )}
         </div>
       </div>
+      <AlertModal
+        isOpen={Boolean(successMessage)}
+        message={successMessage}
+        onClose={handleSuccessModalClose}
+      />
     </div>
   );
 }
