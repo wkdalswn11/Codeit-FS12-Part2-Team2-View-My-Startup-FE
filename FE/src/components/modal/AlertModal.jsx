@@ -1,4 +1,4 @@
-import "./alertModal.css";
+import "./AlertModal.css";
 
 const AlertModal = ({ isOpen, message, onClose }) => {
   if (!isOpen) return null;
