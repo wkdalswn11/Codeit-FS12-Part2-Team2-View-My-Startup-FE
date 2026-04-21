@@ -25,6 +25,33 @@ export async function getCompanyDetail(id) {
   return request(`/companies/${id}`);
 }
 
-export async function getCompanyInvestments({ id, page = 1, limit = 10 }) {
-  return request(`/companies/${id}/investments?page=${page}&limit=${limit}`);
+export async function getCompanyInvestments({
+  id,
+  page = 1,
+  limit = 10,
+  keyword = "",
+}) {
+  return request(
+    `/companies/${id}/investments?page=${page}&limit=${limit}&keyword=${keyword}`,
+  );
+}
+
+export async function updateCompanyInvestment({
+  companyId,
+  investmentId,
+  data,
+}) {
+  return request(`/companies/${companyId}/investments/${investmentId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteCompanyInvestment({ companyId, investmentId }) {
+  return request(`/companies/${companyId}/investments/${investmentId}`, {
+    method: "DELETE",
+  });
 }

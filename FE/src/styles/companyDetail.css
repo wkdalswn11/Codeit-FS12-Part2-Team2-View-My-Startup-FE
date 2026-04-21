@@ -54,6 +54,16 @@
   margin-bottom: 24px;
 }
 
+.detail-investment-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.detail-investment-controls .layout-search-bar {
+  width: min(100%, 360px);
+}
+
 .detail-investment-total {
   margin: 0;
   padding: 20px 0;
@@ -65,7 +75,7 @@
 
 .detail-table-header {
   display: grid;
-  grid-template-columns: 1.1fr 0.7fr 0.9fr 3fr;
+  grid-template-columns: 1.1fr 0.7fr 0.9fr 3fr 1fr;
   align-items: center;
   padding: 16px 20px;
   border-radius: 8px;
@@ -83,7 +93,7 @@
 
 .detail-investment-item {
   display: grid;
-  grid-template-columns: 1.1fr 0.7fr 0.9fr 3fr;
+  grid-template-columns: 1.1fr 0.7fr 0.9fr 3fr 1fr;
   align-items: center;
   padding: 26px 20px;
   border-bottom: 1px solid #2a2a2a;
@@ -107,6 +117,149 @@
   color: #d1d1d1;
 }
 
+.detail-invest-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  min-height: 34px;
+}
+
+.detail-action-button {
+  min-width: 52px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.detail-action-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.detail-action-edit {
+  border: 1px solid #eb5230;
+  background: transparent;
+  color: #eb5230;
+}
+
+.detail-action-delete {
+  border: 1px solid #747474;
+  background: transparent;
+  color: #ffffff;
+}
+
+.detail-edit-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.detail-edit-modal {
+  width: min(100%, 496px);
+  padding: 24px;
+  border-radius: 8px;
+  background: #212121;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+.detail-edit-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.detail-edit-modal-header h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.detail-edit-close-button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.detail-edit-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.detail-edit-input,
+.detail-edit-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #444444;
+  border-radius: 8px;
+  background: #2a2a2a;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.detail-edit-input {
+  height: 48px;
+  padding: 0 12px;
+}
+
+.detail-edit-textarea {
+  min-height: 108px;
+  padding: 12px;
+  resize: vertical;
+}
+
+.detail-edit-modal-footer {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.detail-edit-cancel-button,
+.detail-edit-submit-button {
+  width: 100%;
+  height: 48px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.detail-edit-cancel-button {
+  border: 1px solid #eb5230;
+  background: transparent;
+  color: #eb5230;
+}
+
+.detail-edit-submit-button {
+  border: none;
+  background: #eb5230;
+  color: #ffffff;
+}
+
+.detail-edit-submit-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .empty-investment {
   padding: 32px 20px;
   border-radius: 8px;
@@ -128,7 +281,7 @@
 
   .detail-table-header,
   .detail-investment-item {
-    grid-template-columns: 0.5fr 0.3fr 1.5fr 3fr;
+    grid-template-columns: 0.5fr 0.3fr 1.5fr 3fr 1fr;
   }
 }
 
@@ -194,5 +347,13 @@
     padding: 18px;
     border-radius: 8px;
     margin-bottom: 12px;
+  }
+
+  .detail-invest-actions {
+    justify-content: flex-start;
+  }
+
+  .detail-edit-modal-footer {
+    flex-direction: column;
   }
 }
