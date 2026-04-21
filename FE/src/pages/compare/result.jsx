@@ -7,6 +7,7 @@ import SelectedList from "../../components/search/SelectedList";
 import SelectCompanyModal from "../../components/modal/SelectCompanyModal";
 
 const Result = () => {
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const storedUser = localStorage.getItem("mystartup_user");
   const user = storedUser ? JSON.parse(storedUser) : null;
   const USER_ID = user?.id;
@@ -72,15 +73,13 @@ const Result = () => {
     try {
       setLoading(true);
 
-      const resCompare = await fetch(
-        `http://localhost:8080/users/${USER_ID}/selections`,
-      );
+      const resCompare = await fetch(`${BASE_URL}/users/${USER_ID}/selections`);
       if (!resCompare.ok) throw new Error("비교 리스트 로드 실패");
       const resultCompare = await resCompare.json();
       setCompareList(resultCompare.data || []);
 
       const resRank = await fetch(
-        `http://localhost:8080/users/${USER_ID}/selections/ranking`,
+        `${BASE_URL}/users/${USER_ID}/selections/ranking`,
       );
       if (!resRank.ok) throw new Error("전체 순위 로드 실패");
       const resultRank = await resRank.json();
@@ -98,14 +97,11 @@ const Result = () => {
 
   const handleCompanySelect = async (company) => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/users/${USER_ID}/favorites`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ companyId: company.id }),
-        },
-      );
+      const response = await fetch(`${BASE_URL}/users/${USER_ID}/favorites`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ companyId: company.id }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
