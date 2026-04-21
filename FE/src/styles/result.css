@@ -43,14 +43,14 @@
   display: flex;
   justify-content: center; /* 카드를 가로 중앙에 배치 */
   padding: 40px 0;
-  background-color: #1a1a1a; /* 이미지처럼 짙은 배경색 */
+  background-color: #212121; /* 이미지처럼 짙은 배경색 */
   border-radius: 12px;
   margin-top: 20px;
 }
 
 /* 카드가 놓이는 전체 배경 박스 */
 .main-card-display-area {
-  background-color: #1a1a1a; /* 이미지의 어두운 배경색 */
+  background-color: #212121; /* 이미지의 어두운 배경색 */
   border-radius: 12px;
   padding: 60px 0;
   display: flex;
@@ -92,19 +92,19 @@
 
 .result-card-company-name {
   color: #ffffff;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   margin-bottom: 5px;
 }
 
 .result-card-company-category {
-  color: #888888;
-  font-size: 16px;
+  color: #747474;
+  font-size: 18px;
 }
 
 /* 빈 상태 스타일 */
 .result-custom-empty-card {
-  color: #666;
+  color: #747474;
   font-size: 18px;
 }
 

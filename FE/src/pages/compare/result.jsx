@@ -16,7 +16,8 @@ const Result = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [compareList, setCompareList] = useState([]);
   const [rankList, setRankList] = useState([]);
-  const [sortValue, setSortValue] = useState("baseInvestment_desc");
+  const [compareSort, setCompareSort] = useState("baseInvestment_desc");
+  const [rankSort, setRankSort] = useState("baseInvestment_desc");
   //카드부분
   const renderSelectedCard = () => {
     if (loading)
@@ -50,23 +51,23 @@ const Result = () => {
     );
   };
 
-  const getSortedData = (data) => {
+  const getSortedData = (data, currentSortValue) => {
+    // currentSortValue 인자 추가
     if (!data || data.length === 0) return [];
 
     return [...data].sort((a, b) => {
-      // "baseInvestment_desc" -> ["baseInvestment", "desc"]로 분리
-      const [column, order] = sortValue.split("_");
+      const [column, order] = currentSortValue.split("_");
 
       const valA = a[column] || 0;
       const valB = b[column] || 0;
 
-      // 내림차순(desc)이면 큰 값이 위로, 아니면 작은 값이 위로
       return order === "desc" ? valB - valA : valA - valB;
     });
   };
 
-  const sortedCompareList = getSortedData(compareList);
-  const sortedRankList = getSortedData(rankList);
+  // 각각 다른 상태값을 넣어줍니다.
+  const sortedCompareList = getSortedData(compareList, compareSort);
+  const sortedRankList = getSortedData(rankList, rankSort);
 
   // API 호출 함수
   const fetchData = useCallback(async () => {
@@ -142,7 +143,7 @@ const Result = () => {
             <h2 className="result-section-title">비교 결과 확인하기</h2>
             <SelectedList
               variant="INVESTMENT"
-              onSortChange={(value) => setSortValue(value)}
+              onSortChange={(value) => setCompareSort(value)}
             />
           </div>
           <table className="startup-table mb-4">
@@ -189,7 +190,7 @@ const Result = () => {
             <h2 className="result-section-title">기업 순위 확인하기</h2>
             <SelectedList
               variant="INVESTMENT"
-              onSortChange={(value) => setSortValue(value)}
+              onSortChange={(value) => setRankSort(value)}
             />
           </div>
           <table className="startup-table mb-4">
