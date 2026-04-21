@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./CompareSelectPage.css";
 import SelectCompanyModal from "../../components/modal/SelectCompanyModal";
-
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const CompareSelectPage = () => {
   const storedUser = localStorage.getItem("mystartup_user");
   const parsedUser = storedUser ? JSON.parse(storedUser) : null;
@@ -15,9 +15,7 @@ const CompareSelectPage = () => {
     if (!USER_ID) return;
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/users/${USER_ID}/favorites`,
-      );
+      const res = await fetch(`${BASE_URL}/users/${USER_ID}/favorites`);
       if (!res.ok) throw new Error("나의 기업 조회 실패");
 
       const result = await res.json();
@@ -32,9 +30,7 @@ const CompareSelectPage = () => {
     if (!USER_ID) return;
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/users/${USER_ID}/compares`,
-      );
+      const res = await fetch(`${BASE_URL}/users/${USER_ID}/compares`);
       if (!res.ok) throw new Error("비교 기업 조회 실패");
 
       const result = await res.json();
@@ -58,7 +54,7 @@ const CompareSelectPage = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/users/${USER_ID}/favorites/${myCompany.id}`,
+        `${BASE_URL}/users/${USER_ID}/favorites/${myCompany.id}`,
         { method: "DELETE" },
       );
 
@@ -76,7 +72,7 @@ const CompareSelectPage = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/users/${USER_ID}/compares/${companyId}`,
+        `${BASE_URL}/users/${USER_ID}/compares/${companyId}`,
         { method: "DELETE" },
       );
 
@@ -96,7 +92,7 @@ const CompareSelectPage = () => {
     try {
       await Promise.all(
         compareCompanies.map((company) =>
-          fetch(`http://localhost:8080/users/${USER_ID}/selections`, {
+          fetch(`${BASE_URL}/users/${USER_ID}/selections`, {
             method: "DELETE",
           }),
         ),

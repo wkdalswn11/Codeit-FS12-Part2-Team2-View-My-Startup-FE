@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const signupUser = async (userData) => {
   const response = await fetch(`${BASE_URL}/users`, {

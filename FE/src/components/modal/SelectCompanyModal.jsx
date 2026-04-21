@@ -5,7 +5,7 @@ import SearchBar from "../search/SearchBar";
 import Pagination from "../pagination/Pagination";
 import AlertModal from "./AlertModal";
 import useDebounce from "../../hook/useDebounce";
-
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const storedUser = localStorage.getItem("mystartup_user");
 const user = storedUser ? JSON.parse(storedUser) : null;
 const USER_ID = user?.id;
@@ -47,9 +47,7 @@ const SelectCompanyModal = ({
 
   const fetchRecentFavoriteCompanies = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:8080/users/${USER_ID}/favorites/last`,
-      );
+      const res = await fetch(`${BASE_URL}/users/${USER_ID}/favorites/last`);
 
       if (!res.ok) throw new Error(`조회 실패: ${res.status}`);
 
@@ -63,9 +61,7 @@ const SelectCompanyModal = ({
 
   const syncCompareCompanies = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:8080/users/${USER_ID}/compares`,
-      );
+      const res = await fetch(`${BASE_URL}/users/${USER_ID}/compares`);
 
       if (!res.ok) throw new Error(`비교 기업 조회 실패: ${res.status}`);
 
@@ -87,7 +83,7 @@ const SelectCompanyModal = ({
   const fetchSearchResults = async (page = 1, searchKeyword = keyword) => {
     try {
       const res = await fetch(
-        `http://localhost:8080/companies?keyword=${searchKeyword}&page=${page}&limit=5`,
+        `${BASE_URL}/companies?keyword=${searchKeyword}&page=${page}&limit=5`,
       );
 
       if (!res.ok) throw new Error("검색 실패");
@@ -108,13 +104,12 @@ const SelectCompanyModal = ({
 
     try {
       if (isSelected) {
-        await fetch(
-          `http://localhost:8080/users/${USER_ID}/favorites/${company.id}`,
-          { method: "DELETE" },
-        );
+        await fetch(`${BASE_URL}/users/${USER_ID}/favorites/${company.id}`, {
+          method: "DELETE",
+        });
         onSelectFavorite?.(null);
       } else {
-        await fetch(`http://localhost:8080/users/${USER_ID}/favorites`, {
+        await fetch(`${BASE_URL}/users/${USER_ID}/favorites`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -142,7 +137,7 @@ const SelectCompanyModal = ({
     try {
       if (isSelected) {
         const res = await fetch(
-          `http://localhost:8080/users/${USER_ID}/compares/${company.id}`,
+          `${BASE_URL}/users/${USER_ID}/compares/${company.id}`,
           { method: "DELETE" },
         );
 
@@ -156,14 +151,11 @@ const SelectCompanyModal = ({
           return;
         }
 
-        const res = await fetch(
-          `http://localhost:8080/users/${USER_ID}/compares`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ companyId: company.id }),
-          },
-        );
+        const res = await fetch(`${BASE_URL}/users/${USER_ID}/compares`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ companyId: company.id }),
+        });
 
         if (!res.ok) {
           const errorData = await res.json();
