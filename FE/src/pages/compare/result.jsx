@@ -1,205 +1,249 @@
-import React from "react";
-import CompareCard from "../../components/card/CompareCard";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import "../../styles/result.css";
 import Button from "../../components/ui/Button";
+import ListSkeleton from "../../components/ui/ListSkeleton";
+import SelectedList from "../../components/search/SelectedList";
+import SelectCompanyModal from "../../components/modal/SelectCompanyModal";
 
 const Result = () => {
-  const companyList = [
-    {
-      id: 1,
-      name: "Next AI",
-      businessNumber: "123-45-67890",
-      address: "Seoul, Korea",
-      description:
-        "코드잇은 온라인 코딩 교육 서비스를 운영하는 EdTech 스타트업입니다. 코딩 교육에 대한 수...",
-      revenue: 120000000,
-      employCount: 25,
-      categoryName: "AI",
-      logo: "https://placehold.co/50",
-      baseInvestment: 5000000,
-    },
-    {
-      id: 2,
-      name: "Green Energy Lab",
-      businessNumber: "987-65-43210",
-      address: "Incheon, Korea",
-      description:
-        "코드잇은 온라인 코딩 교육 서비스를 운영하는 EdTech 스타트업입니다. 코딩 교육에 대한 수...",
-      revenue: 80000000,
-      employCount: 18,
-      categoryName: "Energy",
-      logo: "https://placehold.co/50",
-      baseInvestment: 3000000,
-    },
-    {
-      id: 3,
-      name: "FoodTech Lab",
-      businessNumber: "111-22-33333",
-      address: "Busan, Korea",
-      description:
-        "코드잇은 온라인 코딩 교육 서비스를 운영하는 EdTech 스타트업입니다. 코딩 교육에 대한 수...",
-      revenue: 45000000,
-      employCount: 12,
-      categoryName: "FoodTech",
-      logo: "https://placehold.co/50",
-      baseInvestment: 2000000,
-    },
-    {
-      id: 4,
-      name: "Smart Mobility",
-      businessNumber: "222-33-44444",
-      address: "Seoul, Korea",
-      description:
-        "코드잇은 온라인 코딩 교육 서비스를 운영하는 EdTech 스타트업입니다. 코딩 교육에 대한 수...",
-      revenue: 98000000,
-      employCount: 30,
-      categoryName: "Mobility",
-      logo: "https://placehold.co/50",
-      baseInvestment: 7000000,
-    },
-    {
-      id: 5,
-      name: "HealthBridge",
-      businessNumber: "333-44-55555",
-      address: "Daegu, Korea",
-      description:
-        "코드잇은 온라인 코딩 교육 서비스를 운영하는 EdTech 스타트업입니다. 코딩 교육에 대한 수...",
-      revenue: 65000000,
-      employCount: 20,
-      categoryName: "Healthcare",
-      logo: "https://placehold.co/50",
-      baseInvestment: 4000000,
-    },
-    {
-      id: 6,
-      name: "EduNext",
-      businessNumber: "444-55-66666",
-      address: "Daejeon, Korea",
-      description:
-        "코드잇은 온라인 코딩 교육 서비스를 운영하는 EdTech 스타트업입니다. 코딩 교육에 대한 수...",
-      revenue: 55000000,
-      employCount: 15,
-      categoryName: "Education",
-      logo: "https://placehold.co/50",
-      baseInvestment: 3500000,
-    },
-    {
-      id: 7,
-      name: "FinTech Flow",
-      businessNumber: "555-66-77777",
-      address: "Seoul, Korea",
-      description:
-        "코드잇은 온라인 코딩 교육 서비스를 운영하는 EdTech 스타트업입니다. 코딩 교육에 대한 수...",
-      revenue: 150000000,
-      employCount: 40,
-      categoryName: "FinTech",
-      logo: "https://placehold.co/50",
-      baseInvestment: 10000000,
-    },
-    {
-      id: 8,
-      name: "EcoBuild",
-      businessNumber: "666-77-88888",
-      address: "Ulsan, Korea",
-      description:
-        "코드잇은 온라인 코딩 교육 서비스를 운영하는 EdTech 스타트업입니다. 코딩 교육에 대한 수...",
-      revenue: 72000000,
-      employCount: 22,
-      categoryName: "Construction",
-      logo: "https://placehold.co/50",
-      baseInvestment: 6000000,
-    },
-  ];
-  const sortedList = [...companyList].sort((a, b) => b.revenue - a.revenue);
+  const storedUser = localStorage.getItem("mystartup_user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const USER_ID = user?.id;
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [compareList, setCompareList] = useState([]);
+  const [rankList, setRankList] = useState([]);
+  const [sortValue, setSortValue] = useState("baseInvestment_desc");
+  //카드부분
+  const renderSelectedCard = () => {
+    if (loading)
+      return <div className="loading-placeholder">데이터 로딩 중...</div>;
+
+    if (compareList.length === 0) {
+      return (
+        <div className="custom-empty-card">
+          <p>아직 선택된 기업이 없습니다.</p>
+        </div>
+      );
+    }
+
+    const company = compareList[0]; // 가장 최근/첫 번째 선택 기업
+    return (
+      <div className="result-custom-selected-card">
+        <div className="result-card-logo-wrapper">
+          <img
+            src={company.logo || "https://placehold.co/80"}
+            alt={company.name}
+            className="result-card-main-logo"
+          />
+        </div>
+        <div className="result-card-info-wrapper">
+          <h3 className="result-card-company-name">{company.name}</h3>
+          <p className="result-card-company-category">
+            {company.categoryName || company.category || "카테고리 없음"}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
+  const getSortedData = (data) => {
+    if (!data || data.length === 0) return [];
+
+    return [...data].sort((a, b) => {
+      // "baseInvestment_desc" -> ["baseInvestment", "desc"]로 분리
+      const [column, order] = sortValue.split("_");
+
+      const valA = a[column] || 0;
+      const valB = b[column] || 0;
+
+      // 내림차순(desc)이면 큰 값이 위로, 아니면 작은 값이 위로
+      return order === "desc" ? valB - valA : valA - valB;
+    });
+  };
+
+  const sortedCompareList = getSortedData(compareList);
+  const sortedRankList = getSortedData(rankList);
+
+  // API 호출 함수
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      const resCompare = await fetch(
+        `http://localhost:8080/users/${USER_ID}/selections`,
+      );
+      if (!resCompare.ok) throw new Error("비교 리스트 로드 실패");
+      const resultCompare = await resCompare.json();
+      setCompareList(resultCompare.data || []);
+
+      const resRank = await fetch(
+        `http://localhost:8080/users/${USER_ID}/selections/ranking`,
+      );
+      if (!resRank.ok) throw new Error("전체 순위 로드 실패");
+      const resultRank = await resRank.json();
+      setRankList(resultRank.data || []);
+    } catch (error) {
+      console.error("데이터 로드 중 에러 발생:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [USER_ID]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleCompanySelect = async (company) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/users/${USER_ID}/favorites`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ companyId: company.id }),
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.message || "선택 실패");
+        return;
+      }
+
+      setIsModalOpen(false);
+      fetchData();
+    } catch (error) {
+      console.error("비교 기업 등록 에러:", error);
+    }
+  };
+
+  if (loading)
+    return <div className="loading-state">데이터를 불러오는 중입니다...</div>;
+
   return (
-    <>
-      {/* <section>
-        기업추가 카드 들어갈 자리
-        <CompareCard />
-      </section> */}
-      <section>
-        <table className="startup-table mb-4">
-          <thead className="startup-table-head">
-            <tr>
-              <th>기업 명</th>
-              <th>기업 소개</th>
-              <th>카테고리</th>
-              <th>누적 투자금액</th>
-              <th>매출액</th>
-              <th>고용인원</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style={{ height: "20px" }}></tr>
-          </tbody>
-          <tbody className="startup-table-body">
-            {sortedList.map((company, index) => (
-              <tr key={company.id} className="startup-table-row">
-                <td className="company-cell">
-                  <img
-                    src={company.logo}
-                    alt={company.name}
-                    className="company-logo"
-                  />
-                  <span>{company.name}</span>
-                </td>
+    <div className="result-page">
+      <main className="result-container">
+        <section>
+          <div className="result-section-header">
+            <h2 className="result-section-title">내가 선택한 기업</h2>
+            <Button
+              type="Button-medium"
+              variant="Button-primary"
+              onClick={() => navigate("/CompareSelectPage")}
+            >
+              다른 기업 비교하기
+            </Button>
+          </div>
 
-                <td className="desc-cell">{company.description}</td>
+          <div>{renderSelectedCard()}</div>
+        </section>
 
-                <td>{company.categoryName}</td>
-
-                <td>{company.baseInvestment.toLocaleString()}원</td>
-                <td>{company.revenue.toLocaleString()}원</td>
-                <td>{company.employCount}원</td>
+        <section>
+          <div className="result-section-header">
+            <h2 className="result-section-title">비교 결과 확인하기</h2>
+            <SelectedList
+              variant="INVESTMENT"
+              onSortChange={(value) => setSortValue(value)}
+            />
+          </div>
+          <table className="startup-table mb-4">
+            <thead className="startup-table-head">
+              <tr>
+                <th>기업 명</th>
+                <th>기업 소개</th>
+                <th>카테고리</th>
+                <th>누적 투자금액</th>
+                <th>매출액</th>
+                <th>고용인원</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-      <section>
-        <h3>기업 순위 확인하기</h3>
-        <table className="startup-table mb-4">
-          <thead className="startup-table-head">
-            <tr>
-              <th>순위</th>
-              <th>기업 명</th>
-              <th>기업 소개</th>
-              <th>카테고리</th>
-              <th>누적 투자금액</th>
-              <th>매출액</th>
-              <th>고용인원</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style={{ height: "20px" }}></tr>
-          </tbody>
-          <tbody className="startup-table-body">
-            {sortedList.map((company, index) => (
-              <tr key={company.id} className="startup-table-row">
-                <td>{index + 1}위</td>
-                <td className="company-cell">
-                  <img
-                    src={company.logo}
-                    alt={company.name}
-                    className="company-logo"
-                  />
-                  <span>{company.name}</span>
-                </td>
+            </thead>
+            <tbody>
+              <tr style={{ height: "20px" }}></tr>
+            </tbody>
+            <tbody className="startup-table-body">
+              {sortedCompareList.map((company, index) => (
+                <tr key={company.id} className="startup-table-row">
+                  <td className="company-cell">
+                    <img
+                      src={company.logo}
+                      alt={company.name}
+                      className="company-logo"
+                    />
+                    <span>{company.name}</span>
+                  </td>
 
-                <td className="desc-cell">{company.description}</td>
+                  <td className="desc-cell">{company.description}</td>
 
-                <td>{company.categoryName}</td>
+                  <td>{company.category || "-"}</td>
 
-                <td>{company.baseInvestment.toLocaleString()}원</td>
-                <td>{company.revenue.toLocaleString()}원</td>
-                <td>{company.employCount}원</td>
+                  <td>{company.baseInvestment.toLocaleString()}원</td>
+                  <td>{company.revenue.toLocaleString()}원</td>
+                  <td>{company.employeeCount || 0}명</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+
+        <section>
+          <div className="result-section-header">
+            <h2 className="result-section-title">기업 순위 확인하기</h2>
+            <SelectedList
+              variant="INVESTMENT"
+              onSortChange={(value) => setSortValue(value)}
+            />
+          </div>
+          <table className="startup-table mb-4">
+            <thead className="startup-table-head">
+              <tr>
+                <th>순위</th>
+                <th>기업 명</th>
+                <th>기업 소개</th>
+                <th>카테고리</th>
+                <th>누적 투자금액</th>
+                <th>매출액</th>
+                <th>고용인원</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-      {/* 나의 기업에 투자하기 */}
-      <Button />
-    </>
+            </thead>
+            <tbody>
+              <tr style={{ height: "20px" }}></tr>
+            </tbody>
+            <tbody className="startup-table-body">
+              {sortedRankList.map((company, index) => (
+                <tr key={company.id} className="startup-table-row">
+                  <td>{index + 1}위</td>
+                  <td className="company-cell">
+                    <img
+                      src={company.logo}
+                      alt={company.name}
+                      className="company-logo"
+                    />
+                    <span>{company.name}</span>
+                  </td>
+
+                  <td className="desc-cell">{company.description}</td>
+
+                  <td>{company.category || "-"}</td>
+
+                  <td>{company.baseInvestment.toLocaleString()}원</td>
+                  <td>{company.revenue.toLocaleString()}원</td>
+                  <td>{company.employeeCount || 0}명</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+
+        <div className="result-button-container">
+          <Button type="Button-large" variant="Button-primary">
+            나의 기업에 투자하기
+          </Button>
+        </div>
+      </main>
+    </div>
   );
 };
 
