@@ -8,6 +8,7 @@ import Auth from "./pages/auth/Auth";
 import InvestmentPage from "./pages/investment/InvestmentPage";
 import Detail from "./pages/company/detail";
 import CompareSelectPage from "./pages/compare/CompareSelectPage";
+import Result from "./pages/compare/result";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<CompanyPage />} />
         <Route path="/selectCompany/:id" element={<CompareSelectPage />} />
+        <Route path="/compare/result" element={<Result />} />
         <Route path="/investments" element={<InvestmentPage />} />
         <Route path="/compare" element={<ComparePage />} />
         <Route path="/companies/:id" element={<Detail />} />
