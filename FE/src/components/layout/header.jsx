@@ -4,6 +4,9 @@ import "../../../react.css";
 import logo from "./img/logo1.png";
 import { Link, NavLink } from "react-router-dom";
 function Header() {
+  const storedUser = localStorage.getItem("mystartup_user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const USER_ID = user?.id;
   return (
     <header>
       <div className="header-array">
@@ -11,7 +14,11 @@ function Header() {
           <img src={logo} alt="View my startup" className="header-logo" />
         </Link>
         <div className="header-menu-interval">
-          <NavLink to="/" end className="header-menu-name">
+          <NavLink
+            to={`/selectCompany/${USER_ID}`}
+            end
+            className="header-menu-name"
+          >
             나의 기업 비교
           </NavLink>
           <NavLink to="/compare" className="header-menu-name">
