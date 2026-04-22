@@ -11,6 +11,7 @@ import {
   resetAllSelections,
 } from "../../services/compareApi";
 import Button from "../../components/ui/Button";
+import CompareCard from "../../components/card/CompareCard";
 
 const CompareSelectPage = () => {
   const user = useUserStore((state) => state.user);
@@ -104,13 +105,10 @@ const CompareSelectPage = () => {
 
         {!myCompany ? (
           <>
-            <div
-              className="my-company-card my-company-card-empty"
+            <CompareCard
+              variant="add"
               onClick={() => setModalMode("favorite")}
-            >
-              <div className="my-company-card-plus">+</div>
-              <p>기업 추가</p>
-            </div>
+            />
 
             <Button
               className="compare-submit-btn"
@@ -136,27 +134,12 @@ const CompareSelectPage = () => {
                 </Button>
               </div>
 
-              <div className="my-company-card">
-                <Button
-                  type="my-company-card-remove-btn"
-                  variant="Button-outline-gray"
-                  onClick={handleResetMyCompany}
-                >
-                  선택 취소
-                </Button>
-
-                <div className="my-company-card-content">
-                  <img
-                    className="my-company-card-logo"
-                    src={myCompany.logo || "/default.png"}
-                    alt={myCompany.name}
-                  />
-                  <p className="my-company-card-name">{myCompany.name}</p>
-                  <span className="my-company-card-category">
-                    {myCompany.category ?? myCompany.categoryName}
-                  </span>
-                </div>
-              </div>
+              <CompareCard
+                variant="myCompany"
+                company={myCompany}
+                actionLabel="선택 취소"
+                onAction={handleResetMyCompany}
+              />
             </section>
 
             <section className="compare-section">
@@ -177,36 +160,16 @@ const CompareSelectPage = () => {
 
               <div className="compare-section-board">
                 {compareCompanies.length === 0 ? (
-                  <div className="compare-section-empty">
-                    아직 추가한 기업이 없어요,
-                    <br />
-                    버튼을 눌러 기업을 추가해보세요!
-                  </div>
+                  <CompareCard variant="emptyCompare" />
                 ) : (
                   <div className="compare-company-grid">
                     {compareCompanies.map((company) => (
-                      <div key={company.id} className="compare-company-card">
-                        <button
-                          className="compare-company-card-minus-btn"
-                          onClick={() => handleRemoveCompareCompany(company.id)}
-                          aria-label={`${company.name} 선택 해제`}
-                        >
-                          −
-                        </button>
-
-                        <img
-                          className="compare-company-card-logo"
-                          src={company.logo || "/default.png"}
-                          alt={company.name}
-                        />
-
-                        <p className="compare-company-card-name">
-                          {company.name}
-                        </p>
-                        <span className="compare-company-card-category">
-                          {company.category ?? company.categoryName}
-                        </span>
-                      </div>
+                      <CompareCard
+                        key={company.id}
+                        variant="compareCompany"
+                        company={company}
+                        onRemove={() => handleRemoveCompareCompany(company.id)}
+                      />
                     ))}
                   </div>
                 )}

@@ -1,41 +1,87 @@
 import React from "react";
 import "../../styles/compareCard.css";
+import Button from "../ui/Button";
 
-const CompareCard = ({ type = "empty", company }) => {
-  if (type === "add") {
+const CompareCard = ({
+  variant = "add",
+  company,
+  onClick,
+  onRemove,
+  onAction,
+  actionLabel,
+}) => {
+  if (variant === "add") {
     return (
-      <article className="compare-card compare-card-add">
-        <span className="compare-card-plus">+</span>
-        <p className="compare-card-add-text">기업 추가</p>
-      </article>
+      <div className="my-company-card my-company-card-empty" onClick={onClick}>
+        <div className="my-company-card-plus">+</div>
+        <p>기업 추가</p>
+      </div>
     );
   }
 
-  if (type === "selected" && company) {
+  if (variant === "myCompany" && company) {
     return (
-      <article className="compare-card compare-card-selected">
+      <div className="my-company-card">
+        <Button
+          type="my-company-card-remove-btn"
+          variant="Button-outline-gray"
+          onClick={onAction}
+        >
+          {actionLabel}
+        </Button>
+
+        <div className="my-company-card-content">
+          <img
+            className="my-company-card-logo"
+            src={company.logo || "/default.png"}
+            alt={company.name}
+          />
+          <p className="my-company-card-name">{company.name}</p>
+          <span className="my-company-card-category">
+            {company.category ?? company.categoryName}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "compareCompany" && company) {
+    return (
+      <div className="compare-company-card">
+        <button
+          type="button"
+          className="compare-company-card-minus-btn"
+          onClick={onRemove}
+          aria-label={`${company.name} 선택 해제`}
+        >
+          −
+        </button>
+
         <img
-          src={company.logo || "https://placehold.co/80"}
+          className="compare-company-card-logo"
+          src={company.logo || "/default.png"}
           alt={company.name}
-          className="compare-card-logo"
         />
 
-        <div className="compare-card-content">
-          <p className="compare-card-category">
-            {company.categoryName || company.category}
-          </p>
-          <h3 className="compare-card-title">{company.name}</h3>
-          <p className="compare-card-description">{company.description}</p>
-        </div>
-      </article>
+        <p className="compare-company-card-name">{company.name}</p>
+        <span className="compare-company-card-category">
+          {company.category ?? company.categoryName}
+        </span>
+      </div>
     );
   }
 
-  return (
-    <article className="compare-card compare-card-empty">
-      <p className="compare-card-empty-text">어떤 기업이 궁금하세요?</p>
-    </article>
-  );
+  if (variant === "emptyCompare") {
+    return (
+      <div className="compare-section-empty">
+        아직 추가한 기업이 없어요,
+        <br />
+        버튼을 눌러 기업을 추가해보세요!
+      </div>
+    );
+  }
+
+  return null;
 };
 
 export default CompareCard;
