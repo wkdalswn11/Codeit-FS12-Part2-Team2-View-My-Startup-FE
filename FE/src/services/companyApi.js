@@ -62,3 +62,23 @@ export async function deleteCompanyInvestment({ userId, investmentId }) {
     method: "DELETE",
   });
 }
+
+export async function searchCompanies({ keyword = "", page = 1, limit = 5 }) {
+  return request(`/companies?keyword=${keyword}&page=${page}&limit=${limit}`);
+}
+
+export async function getRecentFavoriteCompanies(userId) {
+  if (!userId) {
+    throw new Error("userId가 없습니다.");
+  }
+
+  return request(`/users/${userId}/favorites/last`);
+}
+
+export async function getSelectedCompareCompanies(userId) {
+  if (!userId) {
+    throw new Error("userId가 없습니다.");
+  }
+
+  return request(`/users/${userId}/compares`);
+}

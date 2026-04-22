@@ -6,6 +6,17 @@ import Pagination from "../pagination/Pagination";
 import AlertModal from "./AlertModal";
 import useDebounce from "../../hook/useDebounce";
 import useUserStore from "../../store/userStore";
+import {
+  getRecentFavoriteCompanies,
+  getSelectedCompareCompanies,
+  searchCompanies,
+} from "../../services/companyApi.js";
+import {
+  selectCompareCompany,
+  selectFavoriteCompany,
+  unselectCompareCompany,
+  unselectFavoriteCompany,
+} from "../../services/compareApi.js";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -31,12 +42,18 @@ const SelectCompanyModal = ({
   const USER_ID = user?.id;
 
   useEffect(() => {
-    if (mode === "favorite") {
-      fetchRecentFavoriteCompanies();
-    } else if (mode === "compare") {
-      fetchSelectedCompareCompanies();
-    }
-  }, [mode]);
+    if (!USER_ID || !mode) return;
+
+    const fetchData = async () => {
+      if (mode === "favorite") {
+        await fetchRecentFavoriteCompanies();
+      } else if (mode === "compare") {
+        await fetchSelectedCompareCompanies();
+      }
+    };
+
+    fetchData();
+  }, [mode, USER_ID]);
 
   useEffect(() => {
     setLocalCompareIds(selectedCompareIds);
@@ -48,12 +65,10 @@ const SelectCompanyModal = ({
   }, [debouncedKeyword]);
 
   const fetchRecentFavoriteCompanies = async () => {
+    if (!USER_ID) return;
+
     try {
-      const res = await fetch(`${BASE_URL}/users/${USER_ID}/favorites/last`);
-
-      if (!res.ok) throw new Error(`조회 실패: ${res.status}`);
-
-      const data = await res.json();
+      const data = await getRecentFavoriteCompanies(USER_ID);
       const companies = data.data || [];
       setRecentCompanies(companies);
     } catch (err) {
@@ -62,12 +77,10 @@ const SelectCompanyModal = ({
   };
 
   const syncCompareCompanies = async () => {
+    if (!USER_ID) return;
+
     try {
-      const res = await fetch(`${BASE_URL}/users/${USER_ID}/compares`);
-
-      if (!res.ok) throw new Error(`비교 기업 조회 실패: ${res.status}`);
-
-      const data = await res.json();
+      const data = await getSelectedCompareCompanies(USER_ID);
       const companies = data.data || [];
 
       setRecentCompanies(companies);
@@ -84,13 +97,12 @@ const SelectCompanyModal = ({
 
   const fetchSearchResults = async (page = 1, searchKeyword = keyword) => {
     try {
-      const res = await fetch(
-        `${BASE_URL}/companies?keyword=${searchKeyword}&page=${page}&limit=5`,
-      );
+      const data = await searchCompanies({
+        keyword: searchKeyword,
+        page,
+        limit: 5,
+      });
 
-      if (!res.ok) throw new Error("검색 실패");
-
-      const data = await res.json();
       const companies = data.data || [];
       const total = data.meta?.totalPages || 1;
 
@@ -102,22 +114,16 @@ const SelectCompanyModal = ({
   };
 
   const handleFavoriteSelect = async (company) => {
+    if (!USER_ID) return;
+
     const isSelected = selectedCompanyId === company.id;
 
     try {
       if (isSelected) {
-        await fetch(`${BASE_URL}/users/${USER_ID}/favorites/${company.id}`, {
-          method: "DELETE",
-        });
+        await unselectFavoriteCompany(USER_ID, company.id);
         onSelectFavorite?.(null);
       } else {
-        await fetch(`${BASE_URL}/users/${USER_ID}/favorites`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ companyId: company.id }),
-        });
+        await selectFavoriteCompany(USER_ID, company.id);
         onSelectFavorite?.(company);
       }
 
@@ -128,6 +134,8 @@ const SelectCompanyModal = ({
   };
 
   const handleCompareSelect = async (company) => {
+    if (!USER_ID) return;
+
     if (company.id === selectedCompanyId) {
       setAlertMessage("나의 기업은 선택할 수 없습니다.");
       setAlertOpen(true);
@@ -138,13 +146,7 @@ const SelectCompanyModal = ({
 
     try {
       if (isSelected) {
-        const res = await fetch(
-          `${BASE_URL}/users/${USER_ID}/compares/${company.id}`,
-          { method: "DELETE" },
-        );
-
-        if (!res.ok) throw new Error("삭제 실패");
-
+        await unselectCompareCompany(USER_ID, company.id);
         await syncCompareCompanies();
       } else {
         if (localCompareIds.length >= 5) {
@@ -153,17 +155,7 @@ const SelectCompanyModal = ({
           return;
         }
 
-        const res = await fetch(`${BASE_URL}/users/${USER_ID}/compares`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ companyId: company.id }),
-        });
-
-        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(errorData.message || "에러 발생");
-        }
-
+        await selectCompareCompany(USER_ID, company.id);
         await syncCompareCompanies();
       }
     } catch (err) {
