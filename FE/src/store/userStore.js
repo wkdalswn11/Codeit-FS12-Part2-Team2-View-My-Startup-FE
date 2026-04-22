@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 const getStoredUser = () => {
-  const storedUser = localStorage.getItem("mystartup_user");
+  const storedUser = localStorage.getItem("mystartup.user");
   return storedUser ? JSON.parse(storedUser) : null;
 };
 
@@ -14,7 +14,7 @@ const useUserStore = create((set) => ({
   },
 
   clearUser: () => {
-    localStorage.removeItem("mystartup_user");
+    localStorage.removeItem("mystartup.user");
     set({ user: null });
   },
 }));

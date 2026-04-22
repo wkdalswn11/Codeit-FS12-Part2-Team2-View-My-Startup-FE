@@ -3,8 +3,14 @@ import "./CompareSelectPage.css";
 import SelectCompanyModal from "../../components/modal/SelectCompanyModal";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../../store/userStore";
+import {
+  deleteCompareCompany,
+  deleteMyCompany,
+  getCompareCompanies,
+  getMyCompany,
+  resetAllSelections,
+} from "../../services/compareApi";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const CompareSelectPage = () => {
   const user = useUserStore((state) => state.user);
   const USER_ID = user?.id;
@@ -12,18 +18,14 @@ const CompareSelectPage = () => {
   const navigate = useNavigate();
   const [myCompany, setMyCompany] = useState(null);
   const [compareCompanies, setCompareCompanies] = useState([]);
-  const [modalMode, setModalMode] = useState(null); // "favorite" | "compare" | null
+  const [modalMode, setModalMode] = useState(null);
 
   const fetchMyCompany = async () => {
     if (!USER_ID) return;
 
     try {
-      const res = await fetch(`${BASE_URL}/users/${USER_ID}/favorites`);
-      if (!res.ok) throw new Error("나의 기업 조회 실패");
-
-      const result = await res.json();
-      const companies = result.data || [];
-      setMyCompany(companies[0] ?? null);
+      const company = await getMyCompany(USER_ID);
+      setMyCompany(company);
     } catch (err) {
       console.error(err);
     }
@@ -33,11 +35,8 @@ const CompareSelectPage = () => {
     if (!USER_ID) return;
 
     try {
-      const res = await fetch(`${BASE_URL}/users/${USER_ID}/compares`);
-      if (!res.ok) throw new Error("비교 기업 조회 실패");
-
-      const result = await res.json();
-      setCompareCompanies(result.data || []);
+      const companies = await getCompareCompanies(USER_ID);
+      setCompareCompanies(companies);
     } catch (err) {
       console.error(err);
     }
@@ -56,13 +55,7 @@ const CompareSelectPage = () => {
     if (!USER_ID || !myCompany) return;
 
     try {
-      const res = await fetch(
-        `${BASE_URL}/users/${USER_ID}/favorites/${myCompany.id}`,
-        { method: "DELETE" },
-      );
-
-      if (!res.ok) throw new Error("나의 기업 선택 취소 실패");
-
+      await deleteMyCompany(USER_ID, myCompany.id);
       setMyCompany(null);
       setCompareCompanies([]);
     } catch (err) {
@@ -74,12 +67,7 @@ const CompareSelectPage = () => {
     if (!USER_ID) return;
 
     try {
-      const res = await fetch(
-        `${BASE_URL}/users/${USER_ID}/compares/${companyId}`,
-        { method: "DELETE" },
-      );
-
-      if (!res.ok) throw new Error("비교 기업 선택 해제 실패");
+      await deleteCompareCompany(USER_ID, companyId);
 
       setCompareCompanies((prev) =>
         prev.filter((company) => company.id !== companyId),
@@ -93,13 +81,7 @@ const CompareSelectPage = () => {
     if (!USER_ID || compareCompanies.length === 0) return;
 
     try {
-      await Promise.all(
-        compareCompanies.map((company) =>
-          fetch(`${BASE_URL}/users/${USER_ID}/selections`, {
-            method: "DELETE",
-          }),
-        ),
-      );
+      await resetAllSelections(USER_ID, compareCompanies);
       setMyCompany(null);
       setCompareCompanies([]);
     } catch (err) {
@@ -108,9 +90,11 @@ const CompareSelectPage = () => {
   };
 
   useEffect(() => {
+    if (!USER_ID) return;
+
     fetchMyCompany();
     fetchCompareCompanies();
-  }, []);
+  }, [USER_ID]);
 
   return (
     <div className="compare-page">

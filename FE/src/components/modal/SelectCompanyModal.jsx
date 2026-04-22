@@ -6,9 +6,8 @@ import Pagination from "../pagination/Pagination";
 import AlertModal from "./AlertModal";
 import useDebounce from "../../hook/useDebounce";
 import useUserStore from "../../store/userStore";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const user = useUserStore((state) => state.user);
-const USER_ID = user?.id;
 
 const SelectCompanyModal = ({
   mode,
@@ -27,6 +26,9 @@ const SelectCompanyModal = ({
   const [localCompareIds, setLocalCompareIds] = useState(selectedCompareIds);
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+
+  const user = useUserStore((state) => state.user);
+  const USER_ID = user?.id;
 
   useEffect(() => {
     if (mode === "favorite") {
