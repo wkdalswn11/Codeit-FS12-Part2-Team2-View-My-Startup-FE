@@ -15,6 +15,7 @@ import {
 } from "../../services/companyApi";
 import useDebounce from "../../hook/useDebounce";
 import useUserStore from "../../store/userStore";
+import FormField from "../../components/ui/FormField";
 
 const Detail = () => {
   const [loading, setLoading] = useState(true);
@@ -401,27 +402,21 @@ const Detail = () => {
                   </div>
                 </div>
 
-                <label className="detail-edit-label">
-                  투자 금액
-                  <input
-                    name="amount"
-                    type="number"
-                    min="1"
-                    value={investForm.amount}
-                    onChange={handleInvestFormChange}
-                    className="detail-edit-input"
-                  />
-                </label>
+                <FormField
+                  label="투자 금액"
+                  name="amount"
+                  type="number"
+                  value={investForm.amount}
+                  onChange={handleInvestFormChange}
+                />
 
-                <label className="detail-edit-label">
-                  투자 코멘트
-                  <textarea
-                    name="comment"
-                    value={investForm.comment}
-                    onChange={handleInvestFormChange}
-                    className="detail-edit-textarea"
-                  />
-                </label>
+                <FormField
+                  label="투자 코멘트"
+                  name="comment"
+                  value={investForm.comment}
+                  onChange={handleInvestFormChange}
+                  textarea
+                />
 
                 <div className="detail-edit-modal-footer">
                   <Button
@@ -493,37 +488,28 @@ const Detail = () => {
                   </button>
                 </div>
 
-                <label className="detail-edit-label">
-                  투자자 이름
-                  <input
-                    name="userName"
-                    value={editForm.userName}
-                    className="detail-edit-input"
-                    disabled
-                  />
-                </label>
+                <FormField
+                  label="투자자 이름"
+                  name="userName"
+                  value={editForm.userName}
+                  readOnly
+                />
 
-                <label className="detail-edit-label">
-                  투자 금액
-                  <input
-                    name="amount"
-                    type="number"
-                    min="1"
-                    value={editForm.amount}
-                    onChange={handleEditFormChange}
-                    className="detail-edit-input"
-                  />
-                </label>
+                <FormField
+                  label="투자 금액"
+                  name="amount"
+                  type="number"
+                  value={editForm.amount}
+                  onChange={handleEditFormChange}
+                />
 
-                <label className="detail-edit-label">
-                  투자 코멘트
-                  <textarea
-                    name="comment"
-                    value={editForm.comment}
-                    onChange={handleEditFormChange}
-                    className="detail-edit-textarea"
-                  />
-                </label>
+                <FormField
+                  label="투자 코멘트"
+                  name="comment"
+                  value={editForm.comment}
+                  onChange={handleEditFormChange}
+                  textarea
+                />
 
                 <div className="detail-edit-modal-footer">
                   <Button

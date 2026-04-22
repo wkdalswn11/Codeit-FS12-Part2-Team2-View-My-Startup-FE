@@ -7,10 +7,11 @@ function Button({
   variant = "Button-primary",
   icon,
   className = "",
-  ...props
+  htmlType = "button",
+  ...rest
 }) {
   return (
-    <button className={`Button-btn ${type} ${variant} ${className}`} {...props}>
+    <button className={`Button-btn ${type} ${variant} ${className}`} {...rest}>
       {icon && <span>{icon}</span>}
       {children}
     </button>

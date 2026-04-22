@@ -1,72 +1,88 @@
 input[type="password"]::-webkit-password-toggle-button {
-    display: none;
+  display: none;
 }
 
 input[type="password"]::-ms-reveal {
-    display: none;
+  display: none;
 }
 
 .input-wrapper {
-    position: relative;
-    margin-bottom: 16px;
+  position: relative;
+  margin-bottom: 16px;
 }
 
 .input-field {
-    width: 448px;
-    padding: 16px 20px;
-    padding-right: 40px;
+  width: 448px;
+  padding: 16px 20px;
+  padding-right: 40px;
 
-    border-radius: 10px;
-    border: 1px solid var(--gray-gray_200, #747474);
-    background: var(--black-black_200, #212121);
+  border-radius: 10px;
+  border: 1px solid var(--gray-gray_200, #747474);
+  background: var(--black-black_200, #212121);
 
-    color: #FFF;
-    font-family: Pretendard;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 
-    outline: none;
+  outline: none;
 }
 
 /* focus */
 .input-field:focus {
-    border: 1px solid fff;
+  border: 1px solid fff;
 }
 
 /* disabled */
 .input-field:disabled {
-    background: #444;
-    cursor: not-allowed;
+  background: #444;
+  cursor: not-allowed;
+}
+
+.input-field:read-only {
+  background: #444;
+  cursor: not-allowed;
 }
 
 /* 에러 상태 */
 .input-wrapper.error .input-field {
-    border-radius: 10px;
-    border: 1px solid var(--red-red_error, #C41013);
+  border-radius: 10px;
+  border: 1px solid var(--red-red_error, #c41013);
 }
 
 /* 에러 텍스트 */
 .input-error {
-    margin-top: 6px;
-    color: var(--red-red_C41013, #C41013);
-    font-family: Pretendard;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+  margin-top: 6px;
+  color: var(--red-red_C41013, #c41013);
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 /* 👁 아이콘 */
 .input-eye {
-    position: absolute;
-    top: 55%;
-    right: 24px;
-    transform: translateY(-50%);
+  position: absolute;
+  top: 55%;
+  right: 24px;
+  transform: translateY(-50%);
 
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: fff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: fff;
+}
+
+.input-field[type="number"]::-webkit-outer-spin-button,
+.input-field[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 파이어폭스 */
+.input-field[type="number"] {
+  -moz-appearance: textfield;
 }
