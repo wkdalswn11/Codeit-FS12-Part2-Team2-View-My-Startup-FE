@@ -21,8 +21,7 @@ const Result = () => {
 
   //카드부분
   const renderSelectedCard = () => {
-    if (loading)
-      return <div className="loading-placeholder">데이터 로딩 중...</div>;
+    if (loading) return <div>데이터 로딩 중...</div>;
 
     if (compareList.length === 0) {
       return (
@@ -212,7 +211,7 @@ const Result = () => {
             <tbody className="startup-table-body">
               {sortedRankList.map((company, index) => (
                 <tr key={company.id} className="startup-table-row">
-                  <td>{index + 1}위</td>
+                  <td>{company.rank}위</td>
                   <td className="company-cell">
                     <img
                       src={company.logo}
