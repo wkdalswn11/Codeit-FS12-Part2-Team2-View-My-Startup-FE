@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./CompareSelectPage.css";
 import SelectCompanyModal from "../../components/modal/SelectCompanyModal";
+import { Navigate } from "react-router-dom";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const CompareSelectPage = () => {
   const storedUser = localStorage.getItem("mystartup_user");
@@ -219,7 +220,7 @@ const CompareSelectPage = () => {
             <button
               className="compare-submit-btn"
               disabled={compareCompanies.length === 0}
-              onClick={() => navigate(`/companies/${USER_ID}/result`)}
+              onClick={() => Navigate(`/companies/${USER_ID}/result`)}
             >
               기업 비교하기
             </button>
