@@ -331,16 +331,19 @@ const Detail = () => {
                     <div className="detail-invest-actions">
                       {isMyInvestment(item) && (
                         <>
-                          <button
-                            type="button"
+                          <Button
+                            type="Button-small"
+                            variant="Button-outline-orange"
                             className="detail-action-button detail-action-edit"
                             onClick={() => handleEditClick(item)}
                             disabled={submitting}
                           >
                             수정
-                          </button>
-                          <button
-                            type="button"
+                          </Button>
+
+                          <Button
+                            type="Button-small"
+                            variant="Button-outline-gray"
                             className="detail-action-button detail-action-delete"
                             onClick={() => {
                               setDeleteTarget(item);
@@ -349,7 +352,7 @@ const Detail = () => {
                             disabled={submitting}
                           >
                             삭제
-                          </button>
+                          </Button>
                         </>
                       )}
                     </div>
@@ -421,20 +424,23 @@ const Detail = () => {
                 </label>
 
                 <div className="detail-edit-modal-footer">
-                  <button
-                    type="button"
+                  <Button
+                    type="Button-medium"
+                    variant="Button-outline-orange"
                     className="detail-edit-cancel-button"
                     onClick={() => setIsInvestModalOpen(false)}
                   >
                     취소
-                  </button>
-                  <button
-                    type="submit"
+                  </Button>
+
+                  <Button
+                    type="Button-medium"
+                    variant="Button-primary"
                     className="detail-edit-submit-button"
                     disabled={submitting}
                   >
                     투자하기
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
@@ -445,8 +451,9 @@ const Detail = () => {
                 <h3 className="detail-confirm-title">정말 삭제하시겠습니까?</h3>
 
                 <div className="detail-confirm-actions">
-                  <button
-                    type="button"
+                  <Button
+                    type="Button-medium"
+                    variant="Button-outline-orange"
                     className="detail-confirm-cancel-button"
                     onClick={() => {
                       setIsDeleteConfirmOpen(false);
@@ -454,15 +461,17 @@ const Detail = () => {
                     }}
                   >
                     아니오
-                  </button>
-                  <button
-                    type="button"
+                  </Button>
+
+                  <Button
+                    type="Button-medium"
+                    variant="Button-primary"
                     className="detail-confirm-delete-button"
                     onClick={handleDeleteInvestment}
                     disabled={submitting}
                   >
                     네
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -517,20 +526,24 @@ const Detail = () => {
                 </label>
 
                 <div className="detail-edit-modal-footer">
-                  <button
-                    type="button"
+                  <Button
+                    type="Button-medium"
+                    variant="Button-outline-orange"
                     className="detail-edit-cancel-button"
                     onClick={() => setSelectedInvestment(null)}
                   >
                     취소
-                  </button>
-                  <button
-                    type="submit"
+                  </Button>
+
+                  <Button
+                    type="Button-medium"
+                    variant="Button-primary"
                     className="detail-edit-submit-button"
                     disabled={submitting}
+                    htmlType="submit"
                   >
                     수정 완료
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
