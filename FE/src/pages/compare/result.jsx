@@ -235,7 +235,7 @@ const Result = () => {
           </table>
         </section>
 
-        {/* 나의 기업 투자하기 버튼 */}
+        {/* 나의 기업 투자하기 버튼 모달 페이지 */}
         <div className="result-button-container">
           <Button type="Button-large" variant="Button-primary">
             나의 기업에 투자하기
