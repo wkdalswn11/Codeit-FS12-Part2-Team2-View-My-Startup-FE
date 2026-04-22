@@ -1,0 +1,231 @@
+.compare-select-skeleton-title,
+.compare-select-skeleton-reset-btn,
+.compare-select-skeleton-remove-btn,
+.compare-select-skeleton-my-logo,
+.compare-select-skeleton-my-name,
+.compare-select-skeleton-my-category,
+.compare-select-skeleton-section-title,
+.compare-select-skeleton-add-btn,
+.compare-select-skeleton-minus-btn,
+.compare-select-skeleton-compare-logo,
+.compare-select-skeleton-compare-name,
+.compare-select-skeleton-compare-category,
+.compare-select-skeleton-submit-btn,
+.compare-select-skeleton-my-card,
+.compare-select-skeleton-compare-card {
+  background: linear-gradient(90deg, #2a2a2d 25%, #3a3a3e 37%, #2a2a2d 63%);
+  background-size: 400% 100%;
+  animation: compare-select-skeleton-loading 1.4s ease infinite;
+}
+
+.compare-select-skeleton-title {
+  width: 280px;
+  height: 32px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+}
+
+.compare-select-skeleton-reset-btn {
+  width: 120px;
+  height: 40px;
+  border-radius: 999px;
+}
+
+.compare-select-skeleton-my-card {
+  position: relative;
+  min-height: 260px;
+  border-radius: 4px;
+  background-color: #1f1f21;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.compare-select-skeleton-remove-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 72px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.compare-select-skeleton-my-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.compare-select-skeleton-my-logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  margin-bottom: 14px;
+}
+
+.compare-select-skeleton-my-name {
+  width: 110px;
+  height: 22px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.compare-select-skeleton-my-category {
+  width: 82px;
+  height: 16px;
+  border-radius: 6px;
+}
+
+.compare-select-skeleton-section-title {
+  width: 260px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.compare-select-skeleton-add-btn {
+  width: 128px;
+  height: 40px;
+  border-radius: 999px;
+}
+
+.compare-select-skeleton-compare-card {
+  position: relative;
+  width: 136px;
+  min-height: 170px;
+  padding: 22px 12px 16px;
+  border-radius: 8px;
+  background-color: #353538;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.compare-select-skeleton-minus-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+.compare-select-skeleton-compare-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin-bottom: 14px;
+}
+
+.compare-select-skeleton-compare-name {
+  width: 90px;
+  height: 16px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.compare-select-skeleton-compare-category {
+  width: 70px;
+  height: 12px;
+  border-radius: 6px;
+}
+
+.compare-select-skeleton-submit-btn {
+  width: 160px;
+  height: 48px;
+  border-radius: 999px;
+  margin: 28px auto 0;
+}
+
+@keyframes compare-select-skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  .compare-select-skeleton-title {
+    width: 220px;
+    height: 28px;
+  }
+
+  .compare-select-skeleton-section-title {
+    width: 220px;
+    height: 28px;
+  }
+
+  .compare-select-skeleton-add-btn {
+    width: 100%;
+    height: 40px;
+  }
+
+  .compare-select-skeleton-submit-btn {
+    width: 160px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .compare-select-skeleton-title {
+    width: 180px;
+    height: 24px;
+  }
+
+  .compare-select-skeleton-reset-btn {
+    width: 100px;
+    height: 36px;
+  }
+
+  .compare-select-skeleton-my-card {
+    min-height: 220px;
+  }
+
+  .compare-select-skeleton-my-logo {
+    width: 64px;
+    height: 64px;
+  }
+
+  .compare-select-skeleton-section-title {
+    width: 170px;
+    height: 24px;
+  }
+
+  .compare-select-skeleton-submit-btn {
+    width: 100%;
+    height: 44px;
+  }
+}
+
+.compare-select-skeleton-empty-card,
+.compare-select-skeleton-empty-plus,
+.compare-select-skeleton-empty-text {
+  background: linear-gradient(90deg, #2a2a2d 25%, #3a3a3e 37%, #2a2a2d 63%);
+  background-size: 400% 100%;
+  animation: compare-select-skeleton-loading 1.4s ease infinite;
+}
+
+.compare-select-skeleton-empty-card {
+  min-height: 260px;
+  border-radius: 4px;
+  background-color: #1f1f21;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.compare-select-skeleton-empty-plus {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+}
+
+.compare-select-skeleton-empty-text {
+  width: 90px;
+  height: 20px;
+  border-radius: 6px;
+}

@@ -13,15 +13,17 @@ import {
 import Button from "../../components/ui/Button";
 import CompareCard from "../../components/card/CompareCard";
 import ProtectedDetailLayout from "../../components/layout/ProtectedDetailLayout";
+import CompareSelectSkeleton from "../../components/ui/CompareSelectSkeleton";
 
 const CompareSelectPage = () => {
   const user = useUserStore((state) => state.user);
   const USER_ID = user?.id;
 
   const navigate = useNavigate();
-  const [myCompany, setMyCompany] = useState(null);
+  const [myCompany, setMyCompany] = useState(undefined);
   const [compareCompanies, setCompareCompanies] = useState([]);
   const [modalMode, setModalMode] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchMyCompany = async () => {
     if (!USER_ID) return;
@@ -95,10 +97,27 @@ const CompareSelectPage = () => {
   useEffect(() => {
     if (!USER_ID) return;
 
-    fetchMyCompany();
-    fetchCompareCompanies();
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        await Promise.all([fetchMyCompany(), fetchCompareCompanies()]);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [USER_ID]);
 
+  if (loading) {
+    return (
+      <ProtectedDetailLayout>
+        <CompareSelectSkeleton variant={myCompany ? "selected" : "empty"} />
+      </ProtectedDetailLayout>
+    );
+  }
   return (
     <ProtectedDetailLayout>
       <div className="compare-page">
