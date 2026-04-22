@@ -5,6 +5,7 @@ import Button from "../../components/ui/Button";
 import ListSkeleton from "../../components/ui/ListSkeleton";
 import SelectedList from "../../components/search/SelectedList";
 import useUserStore from "../../store/userStore";
+import ResultSkeleton from "../../components/ui/ResultSkeleton";
 
 const Result = () => {
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -130,8 +131,7 @@ const Result = () => {
     }
   };
 
-  if (loading)
-    return <div className="loading-state">데이터를 불러오는 중입니다...</div>;
+  if (loading) return <ResultSkeleton />;
 
   return (
     <div className="result-page">
