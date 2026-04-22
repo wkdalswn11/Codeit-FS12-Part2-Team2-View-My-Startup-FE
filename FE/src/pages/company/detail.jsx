@@ -6,7 +6,6 @@ import SearchBar from "../../components/search/SearchBar";
 import Pagination from "../../components/pagination/Pagination";
 import DetailSkeleton from "../../components/ui/DetailSkeleton";
 import ProtectedDetailLayout from "../../components/layout/ProtectedDetailLayout";
-import { getStoredUser } from "../auth/Auth";
 import {
   getCompanyDetail,
   getCompanyInvestments,
@@ -15,6 +14,7 @@ import {
   deleteCompanyInvestment,
 } from "../../services/companyApi";
 import useDebounce from "../../hook/useDebounce";
+import useUserStore from "../../store/userStore";
 
 const Detail = () => {
   const [loading, setLoading] = useState(true);
@@ -44,8 +44,9 @@ const Detail = () => {
   });
 
   const { id } = useParams();
-  const user = getStoredUser();
-  const userId = user?.id;
+  const user = useUserStore((state) => state.user);
+  const USER_ID = user?.id;
+
   const debouncedInvestmentSearch = useDebounce(investmentSearch, 500);
 
   const fetchData = useCallback(async () => {
@@ -94,6 +95,8 @@ const Detail = () => {
     return item.userName === user.name || item.userEmail === user.email;
   };
 
+  const hasMyInvestment = investmentList.some((item) => isMyInvestment(item));
+
   const handleEditClick = (item) => {
     setSelectedInvestment(item);
     setEditForm({
@@ -125,7 +128,7 @@ const Detail = () => {
     e.preventDefault();
     if (!selectedInvestment) return;
 
-    if (!userId) {
+    if (!USER_ID) {
       alert("로그인 정보가 없습니다.");
       return;
     }
@@ -139,7 +142,7 @@ const Detail = () => {
       setSubmitting(true);
 
       await updateCompanyInvestment({
-        userId,
+        userId: USER_ID,
         investmentId: selectedInvestment.id,
         data: {
           amount: Number(editForm.amount),
@@ -160,7 +163,7 @@ const Detail = () => {
   const handleCreateInvestment = async (e) => {
     e.preventDefault();
 
-    if (!userId) {
+    if (!USER_ID) {
       alert("로그인 정보가 없습니다.");
       return;
     }
@@ -176,7 +179,7 @@ const Detail = () => {
       await createCompanyInvestment({
         companyId: id,
         data: {
-          userId,
+          userId: USER_ID,
           amount: Number(investForm.amount),
           comment: investForm.comment,
         },
@@ -199,7 +202,7 @@ const Detail = () => {
   const handleDeleteInvestment = async () => {
     if (!deleteTarget) return;
 
-    if (!userId) {
+    if (!USER_ID) {
       alert("로그인 정보가 없습니다.");
       return;
     }
@@ -211,7 +214,7 @@ const Detail = () => {
         prev.filter((investment) => investment.id !== deleteTarget.id),
       );
       await deleteCompanyInvestment({
-        userId,
+        userId: USER_ID,
         investmentId: deleteTarget.id,
       });
 
@@ -283,6 +286,7 @@ const Detail = () => {
                 type="Button-large"
                 variant="Button-primary"
                 onClick={() => setIsInvestModalOpen(true)}
+                disabled={hasMyInvestment}
               >
                 기업 투자하기
               </Button>

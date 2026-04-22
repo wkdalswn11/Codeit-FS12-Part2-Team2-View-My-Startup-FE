@@ -30,7 +30,6 @@ export default function Auth({ onLoginSuccess }) {
   const emailRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const redirectPath = location.state?.from?.pathname || "/";
 
   const setUser = useUserStore((state) => state.setUser);
 
@@ -114,15 +113,7 @@ export default function Auth({ onLoginSuccess }) {
 
   const handleModalClose = () => {
     setModalMessage("");
-
-    if (isSignupSuccess) {
-      setMode("login");
-      setName("");
-      setEmail("");
-      clearErrors();
-    } else if (mode === "login") {
-      navigate(redirectPath, { replace: true });
-    }
+    navigate("/", { replace: true });
   };
 
   return (
