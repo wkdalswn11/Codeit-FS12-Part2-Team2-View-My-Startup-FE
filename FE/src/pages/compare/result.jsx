@@ -4,23 +4,25 @@ import "../../styles/result.css";
 import Button from "../../components/ui/Button";
 import ListSkeleton from "../../components/ui/ListSkeleton";
 import SelectedList from "../../components/search/SelectedList";
-import SelectCompanyModal from "../../components/modal/SelectCompanyModal";
+import useUserStore from "../../store/userStore";
 
 const Result = () => {
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const storedUser = localStorage.getItem("mystartup_user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const user = useUserStore((state) => state.user);
   const USER_ID = user?.id;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [compareList, setCompareList] = useState([]);
   const [rankList, setRankList] = useState([]);
-  const [sortValue, setSortValue] = useState("baseInvestment_desc");
+
+  const [compareSort, setCompareSort] = useState("baseInvestment_desc");
+  const [rankSort, setRankSort] = useState("baseInvestment_desc");
+  const companyId = compareList[0]?.id;
+
   //카드부분
   const renderSelectedCard = () => {
-    if (loading)
-      return <div className="loading-placeholder">데이터 로딩 중...</div>;
+    if (loading) return <div>데이터 로딩 중...</div>;
 
     if (compareList.length === 0) {
       return (
@@ -50,12 +52,12 @@ const Result = () => {
     );
   };
 
-  const getSortedData = (data) => {
+  const getSortedData = (data, currentSortValue) => {
     if (!data || data.length === 0) return [];
 
     return [...data].sort((a, b) => {
       // "baseInvestment_desc" -> ["baseInvestment", "desc"]로 분리
-      const [column, order] = sortValue.split("_");
+      const [column, order] = currentSortValue.split("_");
 
       const valA = a[column] || 0;
       const valB = b[column] || 0;
@@ -65,8 +67,8 @@ const Result = () => {
     });
   };
 
-  const sortedCompareList = getSortedData(compareList);
-  const sortedRankList = getSortedData(rankList);
+  const sortedCompareList = getSortedData(compareList, compareSort);
+  const sortedRankList = getSortedData(rankList, rankSort);
 
   // API 호출 함수
   const fetchData = useCallback(async () => {
@@ -116,6 +118,18 @@ const Result = () => {
     }
   };
 
+  const handleGoToDetail = () => {
+    // compareList의 첫 번째 기업(카드에 표시된 기업)을 가져옵니다.
+    const myCompany = compareList.length > 0 ? compareList[0] : null;
+
+    if (myCompany && myCompany.id) {
+      // 상세 페이지 경로가 /detail/:id 인 경우
+      navigate(`/companies/${companyId}`);
+    } else {
+      alert("선택된 기업이 없습니다. 기업을 먼저 선택해주세요!");
+    }
+  };
+
   if (loading)
     return <div className="loading-state">데이터를 불러오는 중입니다...</div>;
 
@@ -128,7 +142,7 @@ const Result = () => {
             <Button
               type="Button-medium"
               variant="Button-primary"
-              onClick={() => navigate("/CompareSelectPage")}
+              onClick={() => navigate(`/selectCompany/${USER_ID}`)}
             >
               다른 기업 비교하기
             </Button>
@@ -142,7 +156,7 @@ const Result = () => {
             <h2 className="result-section-title">비교 결과 확인하기</h2>
             <SelectedList
               variant="INVESTMENT"
-              onSortChange={(value) => setSortValue(value)}
+              onSortChange={(value) => setCompareSort(value)}
             />
           </div>
           <table className="startup-table mb-4">
@@ -189,7 +203,7 @@ const Result = () => {
             <h2 className="result-section-title">기업 순위 확인하기</h2>
             <SelectedList
               variant="INVESTMENT"
-              onSortChange={(value) => setSortValue(value)}
+              onSortChange={(value) => setRankSort(value)}
             />
           </div>
           <table className="startup-table mb-4">
@@ -210,7 +224,7 @@ const Result = () => {
             <tbody className="startup-table-body">
               {sortedRankList.map((company, index) => (
                 <tr key={company.id} className="startup-table-row">
-                  <td>{index + 1}위</td>
+                  <td>{company.rank}위</td>
                   <td className="company-cell">
                     <img
                       src={company.logo}
@@ -234,7 +248,11 @@ const Result = () => {
         </section>
 
         <div className="result-button-container">
-          <Button type="Button-large" variant="Button-primary">
+          <Button
+            type="Button-large"
+            variant="Button-primary"
+            onClick={handleGoToDetail}
+          >
             나의 기업에 투자하기
           </Button>
         </div>
