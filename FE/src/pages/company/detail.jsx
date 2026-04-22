@@ -10,6 +10,7 @@ import { getStoredUser } from "../auth/Auth";
 import {
   getCompanyDetail,
   getCompanyInvestments,
+  createCompanyInvestment,
   updateCompanyInvestment,
   deleteCompanyInvestment,
 } from "../../services/companyApi";
@@ -23,6 +24,12 @@ const Detail = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [investmentSearch, setInvestmentSearch] = useState("");
   const [selectedInvestment, setSelectedInvestment] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isInvestModalOpen, setIsInvestModalOpen] = useState(false);
+  const [investForm, setInvestForm] = useState({
+    amount: "",
+    comment: "",
+  });
   const [editForm, setEditForm] = useState({
     userName: "",
     amount: "",
@@ -37,6 +44,7 @@ const Detail = () => {
 
   const { id } = useParams();
   const user = getStoredUser();
+  const userId = user?.id;
   const debouncedInvestmentSearch = useDebounce(investmentSearch, 500);
 
   const fetchData = useCallback(async () => {
@@ -103,18 +111,36 @@ const Detail = () => {
     }));
   };
 
+  const handleInvestFormChange = (e) => {
+    const { name, value } = e.target;
+
+    setInvestForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleUpdateInvestment = async (e) => {
     e.preventDefault();
     if (!selectedInvestment) return;
+
+    if (!userId) {
+      alert("로그인 정보가 없습니다.");
+      return;
+    }
+
+    if (!editForm.amount || Number(editForm.amount) <= 0) {
+      alert("투자 금액을 입력해주세요.");
+      return;
+    }
 
     try {
       setSubmitting(true);
 
       await updateCompanyInvestment({
-        companyId: id,
+        userId,
         investmentId: selectedInvestment.id,
         data: {
-          userName: editForm.userName,
           amount: Number(editForm.amount),
           comment: editForm.comment,
         },
@@ -130,17 +156,62 @@ const Detail = () => {
     }
   };
 
-  const handleDeleteInvestment = async (item) => {
-    if (!window.confirm("삭제하시겠습니까?")) return;
+  const handleCreateInvestment = async (e) => {
+    e.preventDefault();
+
+    if (!userId) {
+      alert("로그인 정보가 없습니다.");
+      return;
+    }
+
+    if (!investForm.amount || Number(investForm.amount) <= 0) {
+      alert("투자 금액을 입력해주세요.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      await createCompanyInvestment({
+        companyId: id,
+        data: {
+          userId,
+          amount: Number(investForm.amount),
+          comment: investForm.comment,
+        },
+      });
+
+      setIsInvestModalOpen(false);
+      setInvestForm({
+        amount: "",
+        comment: "",
+      });
+      await fetchData();
+    } catch (err) {
+      console.error(err);
+      alert("투자에 실패했습니다.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDeleteInvestment = async () => {
+    if (!deleteTarget) return;
+
+    if (!userId) {
+      alert("로그인 정보가 없습니다.");
+      return;
+    }
 
     try {
       setSubmitting(true);
 
       await deleteCompanyInvestment({
-        companyId: id,
-        investmentId: item.id,
+        userId,
+        investmentId: deleteTarget.id,
       });
 
+      setDeleteTarget(null);
       await fetchData();
     } catch (err) {
       console.error(err);
@@ -203,7 +274,11 @@ const Detail = () => {
               <h2 className="detail-section-title">
                 View My Startup에서 받은 투자
               </h2>
-              <Button type="Button-large" variant="Button-primary">
+              <Button
+                type="Button-large"
+                variant="Button-primary"
+                onClick={() => setIsInvestModalOpen(true)}
+              >
                 기업 투자하기
               </Button>
             </div>
@@ -258,7 +333,7 @@ const Detail = () => {
                           <button
                             type="button"
                             className="detail-action-button detail-action-delete"
-                            onClick={() => handleDeleteInvestment(item)}
+                            onClick={() => setDeleteTarget(item)}
                             disabled={submitting}
                           >
                             삭제
@@ -278,6 +353,118 @@ const Detail = () => {
             onPageChange={setCurrentPage}
           />
 
+          {isInvestModalOpen && (
+            <div className="detail-edit-modal-backdrop">
+              <form
+                className="detail-edit-modal"
+                onSubmit={handleCreateInvestment}
+              >
+                <div className="detail-edit-modal-header">
+                  <h3>기업 투자하기</h3>
+                  <button
+                    type="button"
+                    className="detail-edit-close-button"
+                    onClick={() => setIsInvestModalOpen(false)}
+                  >
+                    x
+                  </button>
+                </div>
+
+                <div className="detail-modal-company-info">
+                  <img
+                    src={companyDetail.logo || "https://placehold.co/50"}
+                    alt={companyDetail.name}
+                    className="detail-modal-company-logo"
+                  />
+                  <div className="detail-modal-company-title">
+                    <div className="detail-modal-company-name">
+                      {companyDetail.name}
+                    </div>
+                    <div className="detail-modal-company-category">
+                      {companyDetail.category}
+                    </div>
+                  </div>
+                </div>
+
+                <label className="detail-edit-label">
+                  투자 금액
+                  <input
+                    name="amount"
+                    type="number"
+                    min="1"
+                    value={investForm.amount}
+                    onChange={handleInvestFormChange}
+                    className="detail-edit-input"
+                  />
+                </label>
+
+                <label className="detail-edit-label">
+                  투자 코멘트
+                  <textarea
+                    name="comment"
+                    value={investForm.comment}
+                    onChange={handleInvestFormChange}
+                    className="detail-edit-textarea"
+                  />
+                </label>
+
+                <div className="detail-edit-modal-footer">
+                  <button
+                    type="button"
+                    className="detail-edit-cancel-button"
+                    onClick={() => setIsInvestModalOpen(false)}
+                  >
+                    취소
+                  </button>
+                  <button
+                    type="submit"
+                    className="detail-edit-submit-button"
+                    disabled={submitting}
+                  >
+                    투자하기
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {deleteTarget && (
+            <div className="detail-edit-modal-backdrop">
+              <div className="detail-delete-modal">
+                <div className="detail-edit-modal-header">
+                  <h3>삭제 권한 인증</h3>
+                  <button
+                    type="button"
+                    className="detail-edit-close-button"
+                    onClick={() => setDeleteTarget(null)}
+                  >
+                    x
+                  </button>
+                </div>
+
+                <label className="detail-edit-label">
+                  비밀번호
+                  <div className="detail-password-field">
+                    <input
+                      type="password"
+                      placeholder="패스워드를 입력해주세요"
+                      className="detail-edit-input"
+                    />
+                    <span className="detail-password-icon">◎</span>
+                  </div>
+                </label>
+
+                <button
+                  type="button"
+                  className="detail-delete-submit-button"
+                  onClick={handleDeleteInvestment}
+                  disabled={submitting}
+                >
+                  삭제하기
+                </button>
+              </div>
+            </div>
+          )}
           {selectedInvestment && (
             <div className="detail-edit-modal-backdrop">
               <form
@@ -300,8 +487,8 @@ const Detail = () => {
                   <input
                     name="userName"
                     value={editForm.userName}
-                    onChange={handleEditFormChange}
                     className="detail-edit-input"
+                    disabled
                   />
                 </label>
 
@@ -310,7 +497,7 @@ const Detail = () => {
                   <input
                     name="amount"
                     type="number"
-                    min="0"
+                    min="1"
                     value={editForm.amount}
                     onChange={handleEditFormChange}
                     className="detail-edit-input"
