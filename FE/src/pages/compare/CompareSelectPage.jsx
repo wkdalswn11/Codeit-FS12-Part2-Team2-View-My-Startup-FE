@@ -10,6 +10,7 @@ import {
   getMyCompany,
   resetAllSelections,
 } from "../../services/compareApi";
+import Button from "../../components/ui/Button";
 
 const CompareSelectPage = () => {
   const user = useUserStore((state) => state.user);
@@ -98,52 +99,60 @@ const CompareSelectPage = () => {
 
   return (
     <div className="compare-page">
-      <div className="compare-page__container">
-        <h2 className="compare-page__title">나의 기업을 선택해 주세요!</h2>
+      <div className="compare-page-container">
+        <h2 className="compare-page-title">나의 기업을 선택해 주세요!</h2>
 
         {!myCompany ? (
           <>
             <div
-              className="my-company-card my-company-card--empty"
+              className="my-company-card my-company-card-empty"
               onClick={() => setModalMode("favorite")}
             >
-              <div className="my-company-card__plus">+</div>
+              <div className="my-company-card-plus">+</div>
               <p>기업 추가</p>
             </div>
 
-            <button className="compare-submit-btn" disabled>
+            <Button
+              className="compare-submit-btn"
+              type="Button-large"
+              variant="Button-primary"
+              disabled={compareCompanies.length === 0}
+            >
               기업 비교하기
-            </button>
+            </Button>
           </>
         ) : (
           <>
             <section className="my-company-section">
-              <div className="my-company-section__top">
-                <button
-                  className="compare-reset-all-btn"
+              <div className="my-company-section-top">
+                <Button
+                  type="Button-medium"
+                  variant="Button-primary"
+                  icon="↻"
                   onClick={handleResetAllCompares}
                   disabled={compareCompanies.length === 0}
                 >
-                  ↻ 전체 초기화
-                </button>
+                  전체 초기화
+                </Button>
               </div>
 
               <div className="my-company-card">
-                <button
-                  className="my-company-card__remove-btn"
+                <Button
+                  type="my-company-card-remove-btn"
+                  variant="Button-outline-gray"
                   onClick={handleResetMyCompany}
                 >
                   선택 취소
-                </button>
+                </Button>
 
-                <div className="my-company-card__content">
+                <div className="my-company-card-content">
                   <img
-                    className="my-company-card__logo"
+                    className="my-company-card-logo"
                     src={myCompany.logo || "/default.png"}
                     alt={myCompany.name}
                   />
-                  <p className="my-company-card__name">{myCompany.name}</p>
-                  <span className="my-company-card__category">
+                  <p className="my-company-card-name">{myCompany.name}</p>
+                  <span className="my-company-card-category">
                     {myCompany.category ?? myCompany.categoryName}
                   </span>
                 </div>
@@ -151,23 +160,24 @@ const CompareSelectPage = () => {
             </section>
 
             <section className="compare-section">
-              <div className="compare-section__header">
-                <h3 className="compare-section__title">
+              <div className="compare-section-header">
+                <h3 className="compare-section-title">
                   어떤 기업이 궁금하세요? <span>(최대 5개)</span>
                 </h3>
 
-                <button
-                  className="compare-section__add-btn"
+                <Button
+                  type="Button-medium"
+                  variant="Button-primary"
                   onClick={() => setModalMode("compare")}
                   disabled={compareCompanies.length >= 5}
                 >
                   기업 추가하기
-                </button>
+                </Button>
               </div>
 
-              <div className="compare-section__board">
+              <div className="compare-section-board">
                 {compareCompanies.length === 0 ? (
-                  <div className="compare-section__empty">
+                  <div className="compare-section-empty">
                     아직 추가한 기업이 없어요,
                     <br />
                     버튼을 눌러 기업을 추가해보세요!
@@ -177,7 +187,7 @@ const CompareSelectPage = () => {
                     {compareCompanies.map((company) => (
                       <div key={company.id} className="compare-company-card">
                         <button
-                          className="compare-company-card__minus-btn"
+                          className="compare-company-card-minus-btn"
                           onClick={() => handleRemoveCompareCompany(company.id)}
                           aria-label={`${company.name} 선택 해제`}
                         >
@@ -185,15 +195,15 @@ const CompareSelectPage = () => {
                         </button>
 
                         <img
-                          className="compare-company-card__logo"
+                          className="compare-company-card-logo"
                           src={company.logo || "/default.png"}
                           alt={company.name}
                         />
 
-                        <p className="compare-company-card__name">
+                        <p className="compare-company-card-name">
                           {company.name}
                         </p>
-                        <span className="compare-company-card__category">
+                        <span className="compare-company-card-category">
                           {company.category ?? company.categoryName}
                         </span>
                       </div>
@@ -203,13 +213,15 @@ const CompareSelectPage = () => {
               </div>
             </section>
 
-            <button
+            <Button
               className="compare-submit-btn"
+              type="Button-large"
+              variant="Button-primary"
               disabled={compareCompanies.length === 0}
               onClick={() => navigate(`/companies/${USER_ID}/result`)}
             >
               기업 비교하기
-            </button>
+            </Button>
           </>
         )}
 

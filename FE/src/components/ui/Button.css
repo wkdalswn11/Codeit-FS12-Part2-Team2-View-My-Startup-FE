@@ -72,6 +72,14 @@
   opacity: 0.8;
 }
 
+.Button-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  color: var(--gray-gray_200, #747474);
+  background: var(--black-black_100, #2e2e2e);
+}
+
 /* --- 모바일 버전 (767px 이하) --- */
 @media (max-width: 375px) {
   .Button-large {

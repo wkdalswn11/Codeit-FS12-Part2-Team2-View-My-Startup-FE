@@ -6,12 +6,11 @@ function Button({
   type = "Button-large",
   variant = "Button-primary",
   icon,
+  className = "",
   ...props
 }) {
-  // type: Button-large, Button-medium, Button-outline
-  // variant: Button-primary, Button-gray, Button-primary-outline, Button-outline-orange, Button-outline-gray
   return (
-    <button className={`Button-btn ${type} ${variant}`} {...props}>
+    <button className={`Button-btn ${type} ${variant} ${className}`} {...props}>
       {icon && <span>{icon}</span>}
       {children}
     </button>

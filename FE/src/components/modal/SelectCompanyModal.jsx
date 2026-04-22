@@ -17,6 +17,7 @@ import {
   unselectCompareCompany,
   unselectFavoriteCompany,
 } from "../../services/compareApi.js";
+import Button from "../ui/Button.jsx";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -247,14 +248,16 @@ const SelectCompanyModal = ({
                   </div>
                 </div>
 
-                <button
+                <Button
+                  type="Button-medium"
+                  variant="Button-outline-gray"
                   className={`select-btn ${
                     isCompanySelected(company.id) ? "selected" : ""
                   }`}
                   onClick={() => handleSelect(company)}
                 >
                   {isCompanySelected(company.id) ? "선택 해제" : "선택하기"}
-                </button>
+                </Button>
               </div>
             ))}
           </div>
@@ -277,14 +280,16 @@ const SelectCompanyModal = ({
                     </div>
                   </div>
 
-                  <button
+                  <Button
+                    type="Button-medium"
+                    variant="Button-outline-gray"
                     className={`select-btn ${
                       isCompanySelected(company.id) ? "selected" : ""
                     }`}
                     onClick={() => handleSelect(company)}
                   >
                     {isCompanySelected(company.id) ? "선택 해제" : "선택하기"}
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
