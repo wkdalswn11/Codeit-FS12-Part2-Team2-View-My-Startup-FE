@@ -25,6 +25,7 @@ const Detail = () => {
   const [investmentSearch, setInvestmentSearch] = useState("");
   const [selectedInvestment, setSelectedInvestment] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [isInvestModalOpen, setIsInvestModalOpen] = useState(false);
   const [investForm, setInvestForm] = useState({
     amount: "",
@@ -206,12 +207,16 @@ const Detail = () => {
     try {
       setSubmitting(true);
 
+      setInvestmentList((prev) =>
+        prev.filter((investment) => investment.id !== deleteTarget.id),
+      );
       await deleteCompanyInvestment({
         userId,
         investmentId: deleteTarget.id,
       });
 
       setDeleteTarget(null);
+      setIsDeleteConfirmOpen(false);
       await fetchData();
     } catch (err) {
       console.error(err);
@@ -222,7 +227,7 @@ const Detail = () => {
   };
 
   return (
-    <ProtectedDetailLayout title="기업 상세">
+    <ProtectedDetailLayout>
       {loading ? (
         <DetailSkeleton />
       ) : (
@@ -333,7 +338,10 @@ const Detail = () => {
                           <button
                             type="button"
                             className="detail-action-button detail-action-delete"
-                            onClick={() => setDeleteTarget(item)}
+                            onClick={() => {
+                              setDeleteTarget(item);
+                              setIsDeleteConfirmOpen(true);
+                            }}
                             disabled={submitting}
                           >
                             삭제
@@ -427,41 +435,31 @@ const Detail = () => {
               </form>
             </div>
           )}
-
-          {deleteTarget && (
+          {isDeleteConfirmOpen && (
             <div className="detail-edit-modal-backdrop">
-              <div className="detail-delete-modal">
-                <div className="detail-edit-modal-header">
-                  <h3>삭제 권한 인증</h3>
+              <div className="detail-confirm-modal">
+                <h3 className="detail-confirm-title">정말 삭제하시겠습니까?</h3>
+
+                <div className="detail-confirm-actions">
                   <button
                     type="button"
-                    className="detail-edit-close-button"
-                    onClick={() => setDeleteTarget(null)}
+                    className="detail-confirm-cancel-button"
+                    onClick={() => {
+                      setIsDeleteConfirmOpen(false);
+                      setDeleteTarget(null);
+                    }}
                   >
-                    x
+                    아니오
+                  </button>
+                  <button
+                    type="button"
+                    className="detail-confirm-delete-button"
+                    onClick={handleDeleteInvestment}
+                    disabled={submitting}
+                  >
+                    네
                   </button>
                 </div>
-
-                <label className="detail-edit-label">
-                  비밀번호
-                  <div className="detail-password-field">
-                    <input
-                      type="password"
-                      placeholder="패스워드를 입력해주세요"
-                      className="detail-edit-input"
-                    />
-                    <span className="detail-password-icon">◎</span>
-                  </div>
-                </label>
-
-                <button
-                  type="button"
-                  className="detail-delete-submit-button"
-                  onClick={handleDeleteInvestment}
-                  disabled={submitting}
-                >
-                  삭제하기
-                </button>
               </div>
             </div>
           )}
