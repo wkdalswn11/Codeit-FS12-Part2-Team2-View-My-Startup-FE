@@ -16,8 +16,11 @@ import {
   getCompanyInvestments,
   updateCompanyInvestment,
 } from "../../services/investmentApi";
+import AlertModal from "../../components/modal/AlertModal";
 
 const Detail = () => {
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [companyDetail, setCompanyDetail] = useState({});
@@ -76,7 +79,8 @@ const Detail = () => {
       );
     } catch (err) {
       console.error(err);
-      alert("데이터를 불러오지 못했습니다.");
+      setAlertMessage("데이터를 불러오지 못했습니다.");
+      setAlertOpen(true);
     } finally {
       setLoading(false);
     }
@@ -130,12 +134,14 @@ const Detail = () => {
     if (!selectedInvestment) return;
 
     if (!USER_ID) {
-      alert("로그인 정보가 없습니다.");
+      setAlertMessage("로그인 정보가 없습니다.");
+      setAlertOpen(true);
       return;
     }
 
     if (!editForm.amount || Number(editForm.amount) <= 0) {
-      alert("투자 금액을 입력해주세요.");
+      setAlertMessage("투자 금액을 입력해주세요.");
+      setAlertOpen(true);
       return;
     }
 
@@ -155,7 +161,8 @@ const Detail = () => {
       await fetchData();
     } catch (err) {
       console.error(err);
-      alert("수정에 실패했습니다.");
+      setAlertMessage("수정에 실패했습니다.");
+      setAlertOpen(true);
     } finally {
       setSubmitting(false);
     }
@@ -165,12 +172,14 @@ const Detail = () => {
     e.preventDefault();
 
     if (!USER_ID) {
-      alert("로그인 정보가 없습니다.");
+      setAlertMessage("로그인 정보가 없습니다.");
+      setAlertOpen(true);
       return;
     }
 
     if (!investForm.amount || Number(investForm.amount) <= 0) {
-      alert("투자 금액을 입력해주세요.");
+      setAlertMessage("투자 금액을 입력해주세요.");
+      setAlertOpen(true);
       return;
     }
 
@@ -194,7 +203,8 @@ const Detail = () => {
       await fetchData();
     } catch (err) {
       console.error(err);
-      alert("투자에 실패했습니다.");
+      setAlertMessage("투자에 실패했습니다.");
+      setAlertOpen(true);
     } finally {
       setSubmitting(false);
     }
@@ -204,7 +214,8 @@ const Detail = () => {
     if (!deleteTarget) return;
 
     if (!USER_ID) {
-      alert("로그인 정보가 없습니다.");
+      setAlertMessage("로그인 정보가 없습니다.");
+      setAlertOpen(true);
       return;
     }
 
@@ -224,7 +235,8 @@ const Detail = () => {
       await fetchData();
     } catch (err) {
       console.error(err);
-      alert("삭제에 실패했습니다.");
+      setAlertMessage("삭제에 실패했습니다.");
+      setAlertOpen(true);
     } finally {
       setSubmitting(false);
     }
@@ -424,6 +436,7 @@ const Detail = () => {
                     variant="Button-outline-orange"
                     className="detail-edit-cancel-button"
                     onClick={() => setIsInvestModalOpen(false)}
+                    htmlType="button"
                   >
                     취소
                   </Button>
@@ -433,6 +446,7 @@ const Detail = () => {
                     variant="Button-primary"
                     className="detail-edit-submit-button"
                     disabled={submitting}
+                    htmlType="submit"
                   >
                     투자하기
                   </Button>
@@ -464,6 +478,7 @@ const Detail = () => {
                     className="detail-confirm-delete-button"
                     onClick={handleDeleteInvestment}
                     disabled={submitting}
+                    htmlType="button"
                   >
                     네
                   </Button>
@@ -536,6 +551,14 @@ const Detail = () => {
           )}
         </>
       )}
+      <AlertModal
+        isOpen={alertOpen}
+        message={alertMessage}
+        onClose={() => {
+          setAlertOpen(false);
+          setAlertMessage("");
+        }}
+      />
     </ProtectedDetailLayout>
   );
 };
