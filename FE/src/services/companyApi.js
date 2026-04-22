@@ -37,12 +37,18 @@ export async function getCompanyInvestments({
   );
 }
 
-export async function updateCompanyInvestment({
-  companyId,
-  investmentId,
-  data,
-}) {
-  return request(`/companies/${companyId}/investments/${investmentId}`, {
+export async function createCompanyInvestment({ companyId, data }) {
+  return request(`/companies/${companyId}/investments`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateCompanyInvestment({ userId, investmentId, data }) {
+  return request(`/users/${userId}/investments/${investmentId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -51,8 +57,8 @@ export async function updateCompanyInvestment({
   });
 }
 
-export async function deleteCompanyInvestment({ companyId, investmentId }) {
-  return request(`/companies/${companyId}/investments/${investmentId}`, {
+export async function deleteCompanyInvestment({ userId, investmentId }) {
+  return request(`/users/${userId}/investments/${investmentId}`, {
     method: "DELETE",
   });
 }
