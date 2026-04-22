@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import "./CompareSelectPage.css";
 import SelectCompanyModal from "../../components/modal/SelectCompanyModal";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const CompareSelectPage = () => {
   const storedUser = localStorage.getItem("mystartup_user");
   const parsedUser = storedUser ? JSON.parse(storedUser) : null;
   const USER_ID = parsedUser?.id;
 
+  const navigate = useNavigate();
   const [myCompany, setMyCompany] = useState(null);
   const [compareCompanies, setCompareCompanies] = useState([]);
   const [modalMode, setModalMode] = useState(null); // "favorite" | "compare" | null
@@ -220,7 +222,7 @@ const CompareSelectPage = () => {
             <button
               className="compare-submit-btn"
               disabled={compareCompanies.length === 0}
-              onClick={() => Navigate(`/companies/${USER_ID}/result`)}
+              onClick={() => navigate(`/companies/${USER_ID}/result`)}
             >
               기업 비교하기
             </button>
