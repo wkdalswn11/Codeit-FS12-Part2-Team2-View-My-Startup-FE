@@ -16,7 +16,9 @@ const Result = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [compareList, setCompareList] = useState([]);
   const [rankList, setRankList] = useState([]);
-  const [sortValue, setSortValue] = useState("baseInvestment_desc");
+  const [compareSort, setCompareSort] = useState("baseInvestment_desc");
+  const [rankSort, setRankSort] = useState("baseInvestment_desc");
+
   //카드부분
   const renderSelectedCard = () => {
     if (loading)
@@ -29,8 +31,7 @@ const Result = () => {
         </div>
       );
     }
-
-    const company = compareList[0]; // 가장 최근/첫 번째 선택 기업
+    const company = compareList[0];
     return (
       <div className="result-custom-selected-card">
         <div className="result-card-logo-wrapper">
@@ -49,24 +50,22 @@ const Result = () => {
       </div>
     );
   };
-
-  const getSortedData = (data) => {
+  // 정렬기능
+  const getSortedData = (data, currentSortValue) => {
+    // currentSortValue 인자 추가
     if (!data || data.length === 0) return [];
 
     return [...data].sort((a, b) => {
-      // "baseInvestment_desc" -> ["baseInvestment", "desc"]로 분리
-      const [column, order] = sortValue.split("_");
+      const [column, order] = currentSortValue.split("_");
 
       const valA = a[column] || 0;
       const valB = b[column] || 0;
 
-      // 내림차순(desc)이면 큰 값이 위로, 아니면 작은 값이 위로
       return order === "desc" ? valB - valA : valA - valB;
     });
   };
-
-  const sortedCompareList = getSortedData(compareList);
-  const sortedRankList = getSortedData(rankList);
+  const sortedCompareList = getSortedData(compareList, compareSort);
+  const sortedRankList = getSortedData(rankList, rankSort);
 
   // API 호출 함수
   const fetchData = useCallback(async () => {
@@ -122,13 +121,14 @@ const Result = () => {
   return (
     <div className="result-page">
       <main className="result-container">
+        {/* 카드부분 */}
         <section>
           <div className="result-section-header">
             <h2 className="result-section-title">내가 선택한 기업</h2>
             <Button
               type="Button-medium"
               variant="Button-primary"
-              onClick={() => navigate("/CompareSelectPage")}
+              onClick={() => navigate(`selectCompany/${USER_ID}`)}
             >
               다른 기업 비교하기
             </Button>
@@ -137,12 +137,13 @@ const Result = () => {
           <div>{renderSelectedCard()}</div>
         </section>
 
+        {/* 비교결과 확인하기 리스트 */}
         <section>
           <div className="result-section-header">
             <h2 className="result-section-title">비교 결과 확인하기</h2>
             <SelectedList
               variant="INVESTMENT"
-              onSortChange={(value) => setSortValue(value)}
+              onSortChange={(value) => setCompareSort(value)}
             />
           </div>
           <table className="startup-table mb-4">
@@ -184,12 +185,13 @@ const Result = () => {
           </table>
         </section>
 
+        {/* 기업순위 확인하기 리스트 */}
         <section>
           <div className="result-section-header">
             <h2 className="result-section-title">기업 순위 확인하기</h2>
             <SelectedList
               variant="INVESTMENT"
-              onSortChange={(value) => setSortValue(value)}
+              onSortChange={(value) => setRankSort(value)}
             />
           </div>
           <table className="startup-table mb-4">
@@ -233,6 +235,7 @@ const Result = () => {
           </table>
         </section>
 
+        {/* 나의 기업 투자하기 버튼 모달 페이지 */}
         <div className="result-button-container">
           <Button type="Button-large" variant="Button-primary">
             나의 기업에 투자하기
