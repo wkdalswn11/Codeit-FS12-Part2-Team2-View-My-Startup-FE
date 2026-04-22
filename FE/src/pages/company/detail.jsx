@@ -393,6 +393,7 @@ const Detail = () => {
                     type="button"
                     className="detail-edit-close-button"
                     onClick={() => setIsInvestModalOpen(false)}
+                    disabled={submitting}
                   >
                     x
                   </button>
@@ -420,6 +421,7 @@ const Detail = () => {
                   type="number"
                   value={investForm.amount}
                   onChange={handleInvestFormChange}
+                  disabled={submitting}
                 />
 
                 <FormField
@@ -428,6 +430,7 @@ const Detail = () => {
                   value={investForm.comment}
                   onChange={handleInvestFormChange}
                   textarea
+                  disabled={submitting}
                 />
 
                 <div className="detail-edit-modal-footer">
@@ -437,6 +440,7 @@ const Detail = () => {
                     className="detail-edit-cancel-button"
                     onClick={() => setIsInvestModalOpen(false)}
                     htmlType="button"
+                    disabled={submitting}
                   >
                     취소
                   </Button>
@@ -468,6 +472,7 @@ const Detail = () => {
                       setIsDeleteConfirmOpen(false);
                       setDeleteTarget(null);
                     }}
+                    disabled={submitting}
                   >
                     아니오
                   </Button>
@@ -498,6 +503,7 @@ const Detail = () => {
                     type="button"
                     className="detail-edit-close-button"
                     onClick={() => setSelectedInvestment(null)}
+                    disabled={submitting}
                   >
                     x
                   </button>
@@ -516,6 +522,7 @@ const Detail = () => {
                   type="number"
                   value={editForm.amount}
                   onChange={handleEditFormChange}
+                  disabled={submitting}
                 />
 
                 <FormField
@@ -524,6 +531,7 @@ const Detail = () => {
                   value={editForm.comment}
                   onChange={handleEditFormChange}
                   textarea
+                  disabled={submitting}
                 />
 
                 <div className="detail-edit-modal-footer">
@@ -532,6 +540,7 @@ const Detail = () => {
                     variant="Button-outline-orange"
                     className="detail-edit-cancel-button"
                     onClick={() => setSelectedInvestment(null)}
+                    disabled={submitting}
                   >
                     취소
                   </Button>
