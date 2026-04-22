@@ -5,9 +5,9 @@ import SearchBar from "../search/SearchBar";
 import Pagination from "../pagination/Pagination";
 import AlertModal from "./AlertModal";
 import useDebounce from "../../hook/useDebounce";
+import useUserStore from "../../store/userStore";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const storedUser = localStorage.getItem("mystartup_user");
-const user = storedUser ? JSON.parse(storedUser) : null;
+const user = useUserStore((state) => state.user);
 const USER_ID = user?.id;
 
 const SelectCompanyModal = ({

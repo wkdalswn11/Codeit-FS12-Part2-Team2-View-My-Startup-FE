@@ -19,6 +19,7 @@ function App() {
         <Route path="/selectCompany/:id" element={<CompareSelectPage />} />
         <Route path="/companies/:id/result" element={<Result />} />
         <Route path="/compare/result" element={<Result />} />
+        <Route path="/compare" element={<ComparePage />} />
         <Route path="/investments" element={<InvestmentPage />} />
         <Route path="/companies/:id" element={<Detail />} />
         <Route path="/auth" element={<Auth />} />

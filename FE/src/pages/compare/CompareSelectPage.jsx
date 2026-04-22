@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import "./CompareSelectPage.css";
 import SelectCompanyModal from "../../components/modal/SelectCompanyModal";
 import { useNavigate } from "react-router-dom";
+import useUserStore from "../../store/userStore";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const CompareSelectPage = () => {
-  const storedUser = localStorage.getItem("mystartup_user");
-  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-  const USER_ID = parsedUser?.id;
+  const user = useUserStore((state) => state.user);
+  const USER_ID = user?.id;
 
   const navigate = useNavigate();
   const [myCompany, setMyCompany] = useState(null);

@@ -3,9 +3,9 @@ import "./header.css";
 import "../../../react.css";
 import logo from "./img/logo1.png";
 import { Link, NavLink } from "react-router-dom";
+import useUserStore from "../../store/userStore";
 function Header() {
-  const storedUser = localStorage.getItem("mystartup_user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const user = useUserStore((state) => state.user);
   const USER_ID = user?.id;
   return (
     <header>
