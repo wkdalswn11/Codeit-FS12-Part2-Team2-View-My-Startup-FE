@@ -219,6 +219,7 @@ const CompareSelectPage = () => {
             <button
               className="compare-submit-btn"
               disabled={compareCompanies.length === 0}
+              onClick={() => navigate(`/companies/${USER_ID}/result`)}
             >
               기업 비교하기
             </button>
