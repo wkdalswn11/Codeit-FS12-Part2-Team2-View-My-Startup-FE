@@ -1,7 +1,7 @@
 import React from "react";
 import "./header.css";
 import "../../../react.css";
-import logo from "./img/logo1.png";
+import logo from "../../assets/images/logo1.png";
 import { Link, NavLink } from "react-router-dom";
 import useUserStore from "../../store/userStore";
 function Header() {
