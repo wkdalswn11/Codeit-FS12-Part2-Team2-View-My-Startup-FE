@@ -6,16 +6,16 @@ import SearchBar from "../../components/search/SearchBar";
 import Pagination from "../../components/pagination/Pagination";
 import DetailSkeleton from "../../components/ui/DetailSkeleton";
 import ProtectedDetailLayout from "../../components/layout/ProtectedDetailLayout";
-import {
-  getCompanyDetail,
-  getCompanyInvestments,
-  createCompanyInvestment,
-  updateCompanyInvestment,
-  deleteCompanyInvestment,
-} from "../../services/companyApi";
+import { getCompanyDetail } from "../../services/companyApi";
 import useDebounce from "../../hook/useDebounce";
 import useUserStore from "../../store/userStore";
 import FormField from "../../components/ui/FormField";
+import {
+  createCompanyInvestment,
+  deleteCompanyInvestment,
+  getCompanyInvestments,
+  updateCompanyInvestment,
+} from "../../services/investmentApi";
 
 const Detail = () => {
   const [loading, setLoading] = useState(true);
