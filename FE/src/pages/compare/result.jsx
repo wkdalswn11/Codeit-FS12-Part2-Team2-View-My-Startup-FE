@@ -4,7 +4,6 @@ import "../../styles/result.css";
 import Button from "../../components/ui/Button";
 import ListSkeleton from "../../components/ui/ListSkeleton";
 import SelectedList from "../../components/search/SelectedList";
-import SelectCompanyModal from "../../components/modal/SelectCompanyModal";
 
 const Result = () => {
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -18,11 +17,11 @@ const Result = () => {
   const [rankList, setRankList] = useState([]);
   const [compareSort, setCompareSort] = useState("baseInvestment_desc");
   const [rankSort, setRankSort] = useState("baseInvestment_desc");
+  const companyId = compareList[0]?.id;
 
   //카드부분
   const renderSelectedCard = () => {
-    if (loading)
-      return <div className="loading-placeholder">데이터 로딩 중...</div>;
+    if (loading) return <div>데이터 로딩 중...</div>;
 
     if (compareList.length === 0) {
       return (
@@ -115,6 +114,18 @@ const Result = () => {
     }
   };
 
+  const handleGoToDetail = () => {
+    // compareList의 첫 번째 기업(카드에 표시된 기업)을 가져옵니다.
+    const myCompany = compareList.length > 0 ? compareList[0] : null;
+
+    if (myCompany && myCompany.id) {
+      // 상세 페이지 경로가 /detail/:id 인 경우
+      navigate(`/companies/${companyId}`);
+    } else {
+      alert("선택된 기업이 없습니다. 기업을 먼저 선택해주세요!");
+    }
+  };
+
   if (loading)
     return <div className="loading-state">데이터를 불러오는 중입니다...</div>;
 
@@ -128,7 +139,7 @@ const Result = () => {
             <Button
               type="Button-medium"
               variant="Button-primary"
-              onClick={() => navigate(`selectCompany/${USER_ID}`)}
+              onClick={() => navigate(`/selectCompany/${USER_ID}`)}
             >
               다른 기업 비교하기
             </Button>
@@ -212,7 +223,7 @@ const Result = () => {
             <tbody className="startup-table-body">
               {sortedRankList.map((company, index) => (
                 <tr key={company.id} className="startup-table-row">
-                  <td>{index + 1}위</td>
+                  <td>{company.rank}위</td>
                   <td className="company-cell">
                     <img
                       src={company.logo}
@@ -237,7 +248,11 @@ const Result = () => {
 
         {/* 나의 기업 투자하기 버튼 모달 페이지 */}
         <div className="result-button-container">
-          <Button type="Button-large" variant="Button-primary">
+          <Button
+            type="Button-large"
+            variant="Button-primary"
+            onClick={handleGoToDetail}
+          >
             나의 기업에 투자하기
           </Button>
         </div>
