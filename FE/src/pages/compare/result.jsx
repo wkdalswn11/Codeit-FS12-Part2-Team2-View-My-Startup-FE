@@ -128,7 +128,7 @@ const Result = () => {
             <Button
               type="Button-medium"
               variant="Button-primary"
-              onClick={() => navigate(`selectCompany/${USER_ID}`)}
+              onClick={() => navigate(`/selectCompany/${USER_ID}`)}
             >
               다른 기업 비교하기
             </Button>
