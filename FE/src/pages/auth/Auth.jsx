@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AlertModal from "../../components/modal/AlertModal";
 import "../../styles/Auth.css";
 import { loginUser, signupUser } from "../../services/userApi";
+import useUserStore from "../../store/userStore";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const LS_KEY = "mystartup_user";
@@ -14,10 +15,6 @@ export const getStoredUser = () => {
   } catch {
     return null;
   }
-};
-
-const saveUser = (user) => {
-  localStorage.setItem(LS_KEY, JSON.stringify(user));
 };
 
 export default function Auth({ onLoginSuccess }) {
@@ -33,7 +30,8 @@ export default function Auth({ onLoginSuccess }) {
   const emailRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const redirectPath = location.state?.from?.pathname || "/";
+
+  const setUser = useUserStore((state) => state.setUser);
 
   useEffect(() => {
     const user = getStoredUser();
@@ -85,8 +83,9 @@ export default function Auth({ onLoginSuccess }) {
         email: email.trim(),
       });
 
-      saveUser(result.data);
+      setUser(result.data);
       onLoginSuccess?.(result.data);
+
       setIsSignupSuccess(false);
       setModalMessage("로그인이 완료됐습니다.");
     } catch (error) {
@@ -114,15 +113,7 @@ export default function Auth({ onLoginSuccess }) {
 
   const handleModalClose = () => {
     setModalMessage("");
-
-    if (isSignupSuccess) {
-      setMode("login");
-      setName("");
-      setEmail("");
-      clearErrors();
-    } else if (mode === "login") {
-      navigate(redirectPath, { replace: true });
-    }
+    navigate("/", { replace: true });
   };
 
   return (

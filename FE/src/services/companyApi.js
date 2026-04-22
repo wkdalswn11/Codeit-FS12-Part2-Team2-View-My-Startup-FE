@@ -26,39 +26,22 @@ export async function getCompanyDetail(id) {
   return request(`/companies/${id}`);
 }
 
-export async function getCompanyInvestments({
-  id,
-  page = 1,
-  limit = 10,
-  keyword = "",
-}) {
-  return request(
-    `/companies/${id}/investments?page=${page}&limit=${limit}&keyword=${keyword}`,
-  );
+export async function searchCompanies({ keyword = "", page = 1, limit = 5 }) {
+  return request(`/companies?keyword=${keyword}&page=${page}&limit=${limit}`);
 }
 
-export async function createCompanyInvestment({ companyId, data }) {
-  return request(`/companies/${companyId}/investments`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+export async function getRecentFavoriteCompanies(userId) {
+  if (!userId) {
+    throw new Error("userId가 없습니다.");
+  }
+
+  return request(`/users/${userId}/favorites/last`);
 }
 
-export async function updateCompanyInvestment({ userId, investmentId, data }) {
-  return request(`/users/${userId}/investments/${investmentId}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-}
+export async function getSelectedCompareCompanies(userId) {
+  if (!userId) {
+    throw new Error("userId가 없습니다.");
+  }
 
-export async function deleteCompanyInvestment({ userId, investmentId }) {
-  return request(`/users/${userId}/investments/${investmentId}`, {
-    method: "DELETE",
-  });
+  return request(`/users/${userId}/compares`);
 }

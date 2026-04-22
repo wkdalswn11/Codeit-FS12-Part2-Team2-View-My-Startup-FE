@@ -4,17 +4,19 @@ import "../../styles/result.css";
 import Button from "../../components/ui/Button";
 import ListSkeleton from "../../components/ui/ListSkeleton";
 import SelectedList from "../../components/search/SelectedList";
+import useUserStore from "../../store/userStore";
+import ResultSkeleton from "../../components/ui/ResultSkeleton";
 
 const Result = () => {
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const storedUser = localStorage.getItem("mystartup_user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const user = useUserStore((state) => state.user);
   const USER_ID = user?.id;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [compareList, setCompareList] = useState([]);
   const [rankList, setRankList] = useState([]);
+
   const [compareSort, setCompareSort] = useState("baseInvestment_desc");
   const [rankSort, setRankSort] = useState("baseInvestment_desc");
   const companyId = compareList[0]?.id;
@@ -30,7 +32,8 @@ const Result = () => {
         </div>
       );
     }
-    const company = compareList[0];
+
+    const company = compareList[0]; // 가장 최근/첫 번째 선택 기업
     return (
       <div className="result-custom-selected-card">
         <div className="result-card-logo-wrapper">
@@ -49,20 +52,22 @@ const Result = () => {
       </div>
     );
   };
-  // 정렬기능
+
   const getSortedData = (data, currentSortValue) => {
-    // currentSortValue 인자 추가
     if (!data || data.length === 0) return [];
 
     return [...data].sort((a, b) => {
+      // "baseInvestment_desc" -> ["baseInvestment", "desc"]로 분리
       const [column, order] = currentSortValue.split("_");
 
       const valA = a[column] || 0;
       const valB = b[column] || 0;
 
+      // 내림차순(desc)이면 큰 값이 위로, 아니면 작은 값이 위로
       return order === "desc" ? valB - valA : valA - valB;
     });
   };
+
   const sortedCompareList = getSortedData(compareList, compareSort);
   const sortedRankList = getSortedData(rankList, rankSort);
 
@@ -126,13 +131,11 @@ const Result = () => {
     }
   };
 
-  if (loading)
-    return <div className="loading-state">데이터를 불러오는 중입니다...</div>;
+  if (loading) return <ResultSkeleton />;
 
   return (
     <div className="result-page">
       <main className="result-container">
-        {/* 카드부분 */}
         <section>
           <div className="result-section-header">
             <h2 className="result-section-title">내가 선택한 기업</h2>
@@ -148,7 +151,6 @@ const Result = () => {
           <div>{renderSelectedCard()}</div>
         </section>
 
-        {/* 비교결과 확인하기 리스트 */}
         <section>
           <div className="result-section-header">
             <h2 className="result-section-title">비교 결과 확인하기</h2>
@@ -196,7 +198,6 @@ const Result = () => {
           </table>
         </section>
 
-        {/* 기업순위 확인하기 리스트 */}
         <section>
           <div className="result-section-header">
             <h2 className="result-section-title">기업 순위 확인하기</h2>
@@ -246,7 +247,6 @@ const Result = () => {
           </table>
         </section>
 
-        {/* 나의 기업 투자하기 버튼 모달 페이지 */}
         <div className="result-button-container">
           <Button
             type="Button-large"

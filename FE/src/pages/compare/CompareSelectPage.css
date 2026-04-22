@@ -198,17 +198,17 @@
 
 .compare-page {
   min-height: 100vh;
-  background: #0b0b0b;
+  background: #131313;
   color: #ffffff;
 }
 
-.compare-page__container {
+.compare-page-container {
   max-width: 1040px;
   margin: 0 auto;
   padding: 48px 24px 80px;
 }
 
-.compare-page__title {
+.compare-page-title {
   margin-bottom: 18px;
   font-size: 24px;
   font-weight: 700;
@@ -219,7 +219,7 @@
   margin-bottom: 32px;
 }
 
-.my-company-section__top {
+.my-company-section-top {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 10px;
@@ -251,19 +251,19 @@
   justify-content: center;
 }
 
-.my-company-card--empty {
+.my-company-card-empty {
   cursor: pointer;
   flex-direction: column;
   gap: 10px;
   color: #bfbfc4;
 }
 
-.my-company-card__plus {
+.my-company-card-plus {
   font-size: 44px;
   line-height: 1;
 }
 
-.my-company-card__remove-btn {
+.my-company-card-remove-btn {
   position: absolute;
   top: 14px;
   right: 16px;
@@ -274,13 +274,13 @@
   cursor: pointer;
 }
 
-.my-company-card__content {
+.my-company-card-content {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.my-company-card__logo {
+.my-company-card-logo {
   width: 72px;
   height: 72px;
   border-radius: 50%;
@@ -289,39 +289,39 @@
   margin-bottom: 14px;
 }
 
-.my-company-card__name {
+.my-company-card-name {
   margin: 0 0 6px;
   font-size: 18px;
   font-weight: 600;
   color: #ffffff;
 }
 
-.my-company-card__category {
+.my-company-card-category {
   font-size: 14px;
   color: #8d8d93;
 }
 
-.compare-section__header {
+.compare-section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 14px;
 }
 
-.compare-section__title {
+.compare-section-title {
   margin: 0;
   font-size: 24px;
   font-weight: 700;
   color: #f7f7f8;
 }
 
-.compare-section__title span {
+.compare-section-title span {
   font-size: 14px;
   color: #9d9da3;
   font-weight: 500;
 }
 
-.compare-section__add-btn {
+.compare-section-add-btn {
   border: none;
   border-radius: 999px;
   padding: 12px 18px;
@@ -332,21 +332,21 @@
   cursor: pointer;
 }
 
-.compare-section__add-btn:disabled {
+.compare-section-add-btn:disabled {
   background: #2e2e31;
   color: #9d9da3;
   opacity: 1;
   cursor: not-allowed;
 }
 
-.compare-section__board {
+.compare-section-board {
   min-height: 220px;
   border-radius: 4px;
   background: #1f1f21;
   padding: 36px 28px;
 }
 
-.compare-section__empty {
+.compare-section-empty {
   display: flex;
   min-height: 148px;
   align-items: center;
@@ -378,7 +378,7 @@
   justify-content: flex-start;
 }
 
-.compare-company-card__minus-btn {
+.compare-company-card-minus-btn {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -393,7 +393,7 @@
   cursor: pointer;
 }
 
-.compare-company-card__logo {
+.compare-company-card-logo {
   width: 64px;
   height: 64px;
   border-radius: 50%;
@@ -402,7 +402,7 @@
   margin-bottom: 14px;
 }
 
-.compare-company-card__name {
+.compare-company-card-name {
   width: 100%;
   margin: 0 0 6px;
   text-align: center;
@@ -414,7 +414,7 @@
   text-overflow: ellipsis;
 }
 
-.compare-company-card__category {
+.compare-company-card-category {
   width: 100%;
   text-align: center;
   font-size: 12px;
@@ -444,17 +444,17 @@
 }
 
 @media (max-width: 768px) {
-  .compare-page__container {
+  .compare-page-container {
     padding: 32px 16px 56px;
   }
 
-  .compare-section__header {
+  .compare-section-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
 
-  .compare-section__add-btn {
+  .compare-section-add-btn {
     width: 100%;
   }
 

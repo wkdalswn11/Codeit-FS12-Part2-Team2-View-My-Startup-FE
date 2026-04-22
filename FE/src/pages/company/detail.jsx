@@ -6,17 +6,21 @@ import SearchBar from "../../components/search/SearchBar";
 import Pagination from "../../components/pagination/Pagination";
 import DetailSkeleton from "../../components/ui/DetailSkeleton";
 import ProtectedDetailLayout from "../../components/layout/ProtectedDetailLayout";
-import { getStoredUser } from "../auth/Auth";
-import {
-  getCompanyDetail,
-  getCompanyInvestments,
-  createCompanyInvestment,
-  updateCompanyInvestment,
-  deleteCompanyInvestment,
-} from "../../services/companyApi";
+import { getCompanyDetail } from "../../services/companyApi";
 import useDebounce from "../../hook/useDebounce";
+import useUserStore from "../../store/userStore";
+import FormField from "../../components/ui/FormField";
+import {
+  createCompanyInvestment,
+  deleteCompanyInvestment,
+  getCompanyInvestments,
+  updateCompanyInvestment,
+} from "../../services/investmentApi";
+import AlertModal from "../../components/modal/AlertModal";
 
 const Detail = () => {
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [companyDetail, setCompanyDetail] = useState({});
@@ -44,8 +48,9 @@ const Detail = () => {
   });
 
   const { id } = useParams();
-  const user = getStoredUser();
-  const userId = user?.id;
+  const user = useUserStore((state) => state.user);
+  const USER_ID = user?.id;
+
   const debouncedInvestmentSearch = useDebounce(investmentSearch, 500);
 
   const fetchData = useCallback(async () => {
@@ -74,7 +79,8 @@ const Detail = () => {
       );
     } catch (err) {
       console.error(err);
-      alert("데이터를 불러오지 못했습니다.");
+      setAlertMessage("데이터를 불러오지 못했습니다.");
+      setAlertOpen(true);
     } finally {
       setLoading(false);
     }
@@ -93,6 +99,8 @@ const Detail = () => {
 
     return item.userName === user.name || item.userEmail === user.email;
   };
+
+  const hasMyInvestment = investmentList.some((item) => isMyInvestment(item));
 
   const handleEditClick = (item) => {
     setSelectedInvestment(item);
@@ -125,13 +133,15 @@ const Detail = () => {
     e.preventDefault();
     if (!selectedInvestment) return;
 
-    if (!userId) {
-      alert("로그인 정보가 없습니다.");
+    if (!USER_ID) {
+      setAlertMessage("로그인 정보가 없습니다.");
+      setAlertOpen(true);
       return;
     }
 
     if (!editForm.amount || Number(editForm.amount) <= 0) {
-      alert("투자 금액을 입력해주세요.");
+      setAlertMessage("투자 금액을 입력해주세요.");
+      setAlertOpen(true);
       return;
     }
 
@@ -139,7 +149,7 @@ const Detail = () => {
       setSubmitting(true);
 
       await updateCompanyInvestment({
-        userId,
+        userId: USER_ID,
         investmentId: selectedInvestment.id,
         data: {
           amount: Number(editForm.amount),
@@ -151,7 +161,8 @@ const Detail = () => {
       await fetchData();
     } catch (err) {
       console.error(err);
-      alert("수정에 실패했습니다.");
+      setAlertMessage("수정에 실패했습니다.");
+      setAlertOpen(true);
     } finally {
       setSubmitting(false);
     }
@@ -160,13 +171,15 @@ const Detail = () => {
   const handleCreateInvestment = async (e) => {
     e.preventDefault();
 
-    if (!userId) {
-      alert("로그인 정보가 없습니다.");
+    if (!USER_ID) {
+      setAlertMessage("로그인 정보가 없습니다.");
+      setAlertOpen(true);
       return;
     }
 
     if (!investForm.amount || Number(investForm.amount) <= 0) {
-      alert("투자 금액을 입력해주세요.");
+      setAlertMessage("투자 금액을 입력해주세요.");
+      setAlertOpen(true);
       return;
     }
 
@@ -176,7 +189,7 @@ const Detail = () => {
       await createCompanyInvestment({
         companyId: id,
         data: {
-          userId,
+          userId: USER_ID,
           amount: Number(investForm.amount),
           comment: investForm.comment,
         },
@@ -190,7 +203,8 @@ const Detail = () => {
       await fetchData();
     } catch (err) {
       console.error(err);
-      alert("투자에 실패했습니다.");
+      setAlertMessage("투자에 실패했습니다.");
+      setAlertOpen(true);
     } finally {
       setSubmitting(false);
     }
@@ -199,8 +213,9 @@ const Detail = () => {
   const handleDeleteInvestment = async () => {
     if (!deleteTarget) return;
 
-    if (!userId) {
-      alert("로그인 정보가 없습니다.");
+    if (!USER_ID) {
+      setAlertMessage("로그인 정보가 없습니다.");
+      setAlertOpen(true);
       return;
     }
 
@@ -211,7 +226,7 @@ const Detail = () => {
         prev.filter((investment) => investment.id !== deleteTarget.id),
       );
       await deleteCompanyInvestment({
-        userId,
+        userId: USER_ID,
         investmentId: deleteTarget.id,
       });
 
@@ -220,7 +235,8 @@ const Detail = () => {
       await fetchData();
     } catch (err) {
       console.error(err);
-      alert("삭제에 실패했습니다.");
+      setAlertMessage("삭제에 실패했습니다.");
+      setAlertOpen(true);
     } finally {
       setSubmitting(false);
     }
@@ -283,6 +299,7 @@ const Detail = () => {
                 type="Button-large"
                 variant="Button-primary"
                 onClick={() => setIsInvestModalOpen(true)}
+                disabled={hasMyInvestment}
               >
                 기업 투자하기
               </Button>
@@ -327,16 +344,19 @@ const Detail = () => {
                     <div className="detail-invest-actions">
                       {isMyInvestment(item) && (
                         <>
-                          <button
-                            type="button"
+                          <Button
+                            type="Button-small"
+                            variant="Button-outline-orange"
                             className="detail-action-button detail-action-edit"
                             onClick={() => handleEditClick(item)}
                             disabled={submitting}
                           >
                             수정
-                          </button>
-                          <button
-                            type="button"
+                          </Button>
+
+                          <Button
+                            type="Button-small"
+                            variant="Button-outline-gray"
                             className="detail-action-button detail-action-delete"
                             onClick={() => {
                               setDeleteTarget(item);
@@ -345,7 +365,7 @@ const Detail = () => {
                             disabled={submitting}
                           >
                             삭제
-                          </button>
+                          </Button>
                         </>
                       )}
                     </div>
@@ -373,6 +393,7 @@ const Detail = () => {
                     type="button"
                     className="detail-edit-close-button"
                     onClick={() => setIsInvestModalOpen(false)}
+                    disabled={submitting}
                   >
                     x
                   </button>
@@ -394,43 +415,45 @@ const Detail = () => {
                   </div>
                 </div>
 
-                <label className="detail-edit-label">
-                  투자 금액
-                  <input
-                    name="amount"
-                    type="number"
-                    min="1"
-                    value={investForm.amount}
-                    onChange={handleInvestFormChange}
-                    className="detail-edit-input"
-                  />
-                </label>
+                <FormField
+                  label="투자 금액"
+                  name="amount"
+                  type="number"
+                  value={investForm.amount}
+                  onChange={handleInvestFormChange}
+                  disabled={submitting}
+                />
 
-                <label className="detail-edit-label">
-                  투자 코멘트
-                  <textarea
-                    name="comment"
-                    value={investForm.comment}
-                    onChange={handleInvestFormChange}
-                    className="detail-edit-textarea"
-                  />
-                </label>
+                <FormField
+                  label="투자 코멘트"
+                  name="comment"
+                  value={investForm.comment}
+                  onChange={handleInvestFormChange}
+                  textarea
+                  disabled={submitting}
+                />
 
                 <div className="detail-edit-modal-footer">
-                  <button
-                    type="button"
+                  <Button
+                    type="Button-medium"
+                    variant="Button-outline-orange"
                     className="detail-edit-cancel-button"
                     onClick={() => setIsInvestModalOpen(false)}
-                  >
-                    취소
-                  </button>
-                  <button
-                    type="submit"
-                    className="detail-edit-submit-button"
+                    htmlType="button"
                     disabled={submitting}
                   >
+                    취소
+                  </Button>
+
+                  <Button
+                    type="Button-medium"
+                    variant="Button-primary"
+                    className="detail-edit-submit-button"
+                    disabled={submitting}
+                    htmlType="submit"
+                  >
                     투자하기
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
@@ -441,24 +464,29 @@ const Detail = () => {
                 <h3 className="detail-confirm-title">정말 삭제하시겠습니까?</h3>
 
                 <div className="detail-confirm-actions">
-                  <button
-                    type="button"
+                  <Button
+                    type="Button-medium"
+                    variant="Button-outline-orange"
                     className="detail-confirm-cancel-button"
                     onClick={() => {
                       setIsDeleteConfirmOpen(false);
                       setDeleteTarget(null);
                     }}
+                    disabled={submitting}
                   >
                     아니오
-                  </button>
-                  <button
-                    type="button"
+                  </Button>
+
+                  <Button
+                    type="Button-medium"
+                    variant="Button-primary"
                     className="detail-confirm-delete-button"
                     onClick={handleDeleteInvestment}
                     disabled={submitting}
+                    htmlType="button"
                   >
                     네
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -475,64 +503,71 @@ const Detail = () => {
                     type="button"
                     className="detail-edit-close-button"
                     onClick={() => setSelectedInvestment(null)}
+                    disabled={submitting}
                   >
                     x
                   </button>
                 </div>
 
-                <label className="detail-edit-label">
-                  투자자 이름
-                  <input
-                    name="userName"
-                    value={editForm.userName}
-                    className="detail-edit-input"
-                    disabled
-                  />
-                </label>
+                <FormField
+                  label="투자자 이름"
+                  name="userName"
+                  value={editForm.userName}
+                  readOnly
+                />
 
-                <label className="detail-edit-label">
-                  투자 금액
-                  <input
-                    name="amount"
-                    type="number"
-                    min="1"
-                    value={editForm.amount}
-                    onChange={handleEditFormChange}
-                    className="detail-edit-input"
-                  />
-                </label>
+                <FormField
+                  label="투자 금액"
+                  name="amount"
+                  type="number"
+                  value={editForm.amount}
+                  onChange={handleEditFormChange}
+                  disabled={submitting}
+                />
 
-                <label className="detail-edit-label">
-                  투자 코멘트
-                  <textarea
-                    name="comment"
-                    value={editForm.comment}
-                    onChange={handleEditFormChange}
-                    className="detail-edit-textarea"
-                  />
-                </label>
+                <FormField
+                  label="투자 코멘트"
+                  name="comment"
+                  value={editForm.comment}
+                  onChange={handleEditFormChange}
+                  textarea
+                  disabled={submitting}
+                />
 
                 <div className="detail-edit-modal-footer">
-                  <button
-                    type="button"
+                  <Button
+                    type="Button-medium"
+                    variant="Button-outline-orange"
                     className="detail-edit-cancel-button"
                     onClick={() => setSelectedInvestment(null)}
-                  >
-                    취소
-                  </button>
-                  <button
-                    type="submit"
-                    className="detail-edit-submit-button"
                     disabled={submitting}
                   >
+                    취소
+                  </Button>
+
+                  <Button
+                    type="Button-medium"
+                    variant="Button-primary"
+                    className="detail-edit-submit-button"
+                    disabled={submitting}
+                    htmlType="submit"
+                  >
                     수정 완료
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
           )}
         </>
       )}
+      <AlertModal
+        isOpen={alertOpen}
+        message={alertMessage}
+        onClose={() => {
+          setAlertOpen(false);
+          setAlertMessage("");
+        }}
+      />
     </ProtectedDetailLayout>
   );
 };

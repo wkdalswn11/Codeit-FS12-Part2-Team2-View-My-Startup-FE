@@ -2,28 +2,35 @@ import { useEffect, useState } from "react";
 import "./CompareSelectPage.css";
 import SelectCompanyModal from "../../components/modal/SelectCompanyModal";
 import { useNavigate } from "react-router-dom";
+import useUserStore from "../../store/userStore";
+import {
+  deleteCompareCompany,
+  deleteMyCompany,
+  getCompareCompanies,
+  getMyCompany,
+  resetAllSelections,
+} from "../../services/compareApi";
+import Button from "../../components/ui/Button";
+import CompareCard from "../../components/card/CompareCard";
+import ProtectedDetailLayout from "../../components/layout/ProtectedDetailLayout";
+import CompareSelectSkeleton from "../../components/ui/CompareSelectSkeleton";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const CompareSelectPage = () => {
-  const storedUser = localStorage.getItem("mystartup_user");
-  const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-  const USER_ID = parsedUser?.id;
+  const user = useUserStore((state) => state.user);
+  const USER_ID = user?.id;
 
   const navigate = useNavigate();
-  const [myCompany, setMyCompany] = useState(null);
+  const [myCompany, setMyCompany] = useState(undefined);
   const [compareCompanies, setCompareCompanies] = useState([]);
-  const [modalMode, setModalMode] = useState(null); // "favorite" | "compare" | null
+  const [modalMode, setModalMode] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchMyCompany = async () => {
     if (!USER_ID) return;
 
     try {
-      const res = await fetch(`${BASE_URL}/users/${USER_ID}/favorites`);
-      if (!res.ok) throw new Error("나의 기업 조회 실패");
-
-      const result = await res.json();
-      const companies = result.data || [];
-      setMyCompany(companies[0] ?? null);
+      const company = await getMyCompany(USER_ID);
+      setMyCompany(company);
     } catch (err) {
       console.error(err);
     }
@@ -33,11 +40,8 @@ const CompareSelectPage = () => {
     if (!USER_ID) return;
 
     try {
-      const res = await fetch(`${BASE_URL}/users/${USER_ID}/compares`);
-      if (!res.ok) throw new Error("비교 기업 조회 실패");
-
-      const result = await res.json();
-      setCompareCompanies(result.data || []);
+      const companies = await getCompareCompanies(USER_ID);
+      setCompareCompanies(companies);
     } catch (err) {
       console.error(err);
     }
@@ -56,13 +60,7 @@ const CompareSelectPage = () => {
     if (!USER_ID || !myCompany) return;
 
     try {
-      const res = await fetch(
-        `${BASE_URL}/users/${USER_ID}/favorites/${myCompany.id}`,
-        { method: "DELETE" },
-      );
-
-      if (!res.ok) throw new Error("나의 기업 선택 취소 실패");
-
+      await deleteMyCompany(USER_ID, myCompany.id);
       setMyCompany(null);
       setCompareCompanies([]);
     } catch (err) {
@@ -74,12 +72,7 @@ const CompareSelectPage = () => {
     if (!USER_ID) return;
 
     try {
-      const res = await fetch(
-        `${BASE_URL}/users/${USER_ID}/compares/${companyId}`,
-        { method: "DELETE" },
-      );
-
-      if (!res.ok) throw new Error("비교 기업 선택 해제 실패");
+      await deleteCompareCompany(USER_ID, companyId);
 
       setCompareCompanies((prev) =>
         prev.filter((company) => company.id !== companyId),
@@ -93,13 +86,7 @@ const CompareSelectPage = () => {
     if (!USER_ID || compareCompanies.length === 0) return;
 
     try {
-      await Promise.all(
-        compareCompanies.map((company) =>
-          fetch(`${BASE_URL}/users/${USER_ID}/selections`, {
-            method: "DELETE",
-          }),
-        ),
-      );
+      await resetAllSelections(USER_ID, compareCompanies);
       setMyCompany(null);
       setCompareCompanies([]);
     } catch (err) {
@@ -108,139 +95,135 @@ const CompareSelectPage = () => {
   };
 
   useEffect(() => {
-    fetchMyCompany();
-    fetchCompareCompanies();
-  }, []);
+    if (!USER_ID) return;
 
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        await Promise.all([fetchMyCompany(), fetchCompareCompanies()]);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [USER_ID]);
+
+  if (loading) {
+    return (
+      <ProtectedDetailLayout>
+        <CompareSelectSkeleton variant={myCompany ? "selected" : "empty"} />
+      </ProtectedDetailLayout>
+    );
+  }
   return (
-    <div className="compare-page">
-      <div className="compare-page__container">
-        <h2 className="compare-page__title">나의 기업을 선택해 주세요!</h2>
+    <ProtectedDetailLayout>
+      <div className="compare-page">
+        <div className="compare-page-container">
+          <h2 className="compare-page-title">나의 기업을 선택해 주세요!</h2>
 
-        {!myCompany ? (
-          <>
-            <div
-              className="my-company-card my-company-card--empty"
-              onClick={() => setModalMode("favorite")}
-            >
-              <div className="my-company-card__plus">+</div>
-              <p>기업 추가</p>
-            </div>
+          {!myCompany ? (
+            <>
+              <CompareCard
+                variant="add"
+                onClick={() => setModalMode("favorite")}
+              />
 
-            <button className="compare-submit-btn" disabled>
-              기업 비교하기
-            </button>
-          </>
-        ) : (
-          <>
-            <section className="my-company-section">
-              <div className="my-company-section__top">
-                <button
-                  className="compare-reset-all-btn"
-                  onClick={handleResetAllCompares}
-                  disabled={compareCompanies.length === 0}
-                >
-                  ↻ 전체 초기화
-                </button>
-              </div>
-
-              <div className="my-company-card">
-                <button
-                  className="my-company-card__remove-btn"
-                  onClick={handleResetMyCompany}
-                >
-                  선택 취소
-                </button>
-
-                <div className="my-company-card__content">
-                  <img
-                    className="my-company-card__logo"
-                    src={myCompany.logo || "/default.png"}
-                    alt={myCompany.name}
-                  />
-                  <p className="my-company-card__name">{myCompany.name}</p>
-                  <span className="my-company-card__category">
-                    {myCompany.category ?? myCompany.categoryName}
-                  </span>
+              <Button
+                className="compare-submit-btn"
+                type="Button-large"
+                variant="Button-primary"
+                disabled={compareCompanies.length === 0}
+              >
+                기업 비교하기
+              </Button>
+            </>
+          ) : (
+            <>
+              <section className="my-company-section">
+                <div className="my-company-section-top">
+                  <Button
+                    type="Button-medium"
+                    variant="Button-primary"
+                    icon="↻"
+                    onClick={handleResetAllCompares}
+                    disabled={compareCompanies.length === 0}
+                  >
+                    전체 초기화
+                  </Button>
                 </div>
-              </div>
-            </section>
 
-            <section className="compare-section">
-              <div className="compare-section__header">
-                <h3 className="compare-section__title">
-                  어떤 기업이 궁금하세요? <span>(최대 5개)</span>
-                </h3>
+                <CompareCard
+                  variant="myCompany"
+                  company={myCompany}
+                  actionLabel="선택 취소"
+                  onAction={handleResetMyCompany}
+                />
+              </section>
 
-                <button
-                  className="compare-section__add-btn"
-                  onClick={() => setModalMode("compare")}
-                  disabled={compareCompanies.length >= 5}
-                >
-                  기업 추가하기
-                </button>
-              </div>
+              <section className="compare-section">
+                <div className="compare-section-header">
+                  <h3 className="compare-section-title">
+                    어떤 기업이 궁금하세요? <span>(최대 5개)</span>
+                  </h3>
 
-              <div className="compare-section__board">
-                {compareCompanies.length === 0 ? (
-                  <div className="compare-section__empty">
-                    아직 추가한 기업이 없어요,
-                    <br />
-                    버튼을 눌러 기업을 추가해보세요!
-                  </div>
-                ) : (
-                  <div className="compare-company-grid">
-                    {compareCompanies.map((company) => (
-                      <div key={company.id} className="compare-company-card">
-                        <button
-                          className="compare-company-card__minus-btn"
-                          onClick={() => handleRemoveCompareCompany(company.id)}
-                          aria-label={`${company.name} 선택 해제`}
-                        >
-                          −
-                        </button>
+                  <Button
+                    type="Button-medium"
+                    variant="Button-primary"
+                    onClick={() => setModalMode("compare")}
+                    disabled={compareCompanies.length >= 5}
+                  >
+                    기업 추가하기
+                  </Button>
+                </div>
 
-                        <img
-                          className="compare-company-card__logo"
-                          src={company.logo || "/default.png"}
-                          alt={company.name}
+                <div className="compare-section-board">
+                  {compareCompanies.length === 0 ? (
+                    <CompareCard variant="emptyCompare" />
+                  ) : (
+                    <div className="compare-company-grid">
+                      {compareCompanies.map((company) => (
+                        <CompareCard
+                          key={company.id}
+                          variant="compareCompany"
+                          company={company}
+                          onRemove={() =>
+                            handleRemoveCompareCompany(company.id)
+                          }
                         />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </section>
 
-                        <p className="compare-company-card__name">
-                          {company.name}
-                        </p>
-                        <span className="compare-company-card__category">
-                          {company.category ?? company.categoryName}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </section>
+              <Button
+                className="compare-submit-btn"
+                type="Button-large"
+                variant="Button-primary"
+                disabled={compareCompanies.length === 0}
+                onClick={() => navigate(`/companies/${USER_ID}/result`)}
+              >
+                기업 비교하기
+              </Button>
+            </>
+          )}
 
-            <button
-              className="compare-submit-btn"
-              disabled={compareCompanies.length === 0}
-              onClick={() => navigate(`/companies/${USER_ID}/result`)}
-            >
-              기업 비교하기
-            </button>
-          </>
-        )}
-
-        {modalMode && (
-          <SelectCompanyModal
-            mode={modalMode}
-            onClose={() => setModalMode(null)}
-            onSelectFavorite={handleSelectMyCompany}
-            onSelectCompare={handleSelectCompareCompanies}
-            selectedCompanyId={myCompany?.id}
-            selectedCompareIds={compareCompanies.map((company) => company.id)}
-          />
-        )}
+          {modalMode && (
+            <SelectCompanyModal
+              mode={modalMode}
+              onClose={() => setModalMode(null)}
+              onSelectFavorite={handleSelectMyCompany}
+              onSelectCompare={handleSelectCompareCompanies}
+              selectedCompanyId={myCompany?.id}
+              selectedCompareIds={compareCompanies.map((company) => company.id)}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </ProtectedDetailLayout>
   );
 };
 
