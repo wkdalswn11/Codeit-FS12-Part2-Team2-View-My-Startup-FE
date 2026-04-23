@@ -52,7 +52,7 @@
 .result-card-logo-wrapper {
   width: 100px;
   height: 100px;
-  background-color: #fff;
+
   border-radius: 50%;
   overflow: hidden;
   display: flex;
@@ -62,8 +62,6 @@
 }
 
 .result-card-main-logo {
-  width: 80%;
-  height: auto;
   object-fit: contain;
 }
 

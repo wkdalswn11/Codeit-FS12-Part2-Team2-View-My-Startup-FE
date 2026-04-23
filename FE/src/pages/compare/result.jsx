@@ -18,7 +18,7 @@ const Result = () => {
   const [rankList, setRankList] = useState([]);
 
   const [compareSort, setCompareSort] = useState("baseInvestment_desc");
-  const [rankSort, setRankSort] = useState("baseInvestment_desc");
+  const [rankSort, setRankSort] = useState("revenue_desc");
   const companyId = compareList[0]?.id;
 
   //카드부분
@@ -203,10 +203,13 @@ const Result = () => {
         <section>
           <div className="result-section-header">
             <h2 className="result-section-title">기업 순위 확인하기</h2>
-            <SelectedList
-              variant="INVESTMENT"
-              onSortChange={(value) => setRankSort(value)}
-            />
+            {!loading && (
+              <SelectedList
+                variant="INVESTMENT"
+                value={rankSort}
+                onSortChange={(value) => setRankSort(value)}
+              />
+            )}
           </div>
           <div className="startup-table-wrap">
             <table className="startup-table mb-4">
