@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../../styles/companyDetail.css";
+import "../../styles/table.css";
 import Button from "../../components/ui/Button";
 import SearchBar from "../../components/search/SearchBar";
 import Pagination from "../../components/pagination/Pagination";
@@ -317,61 +318,75 @@ const Detail = () => {
               총 {companyDetail?.siteInvestment?.toLocaleString() ?? 0} 원
             </h3>
 
-            <div className="detail-table-header">
-              <span>투자자 이름</span>
-              <span>순위</span>
-              <span>투자 금액</span>
-              <span>투자 코멘트</span>
-              <span>관리</span>
-            </div>
+            <div className="startup-table-wrap">
+              <table className="startup-table mb-4">
+                <thead className="startup-table-head">
+                  <tr>
+                    <th>투자자 이름</th>
+                    <th>순위</th>
+                    <th>투자 금액</th>
+                    <th>투자 코멘트</th>
+                    <th>관리</th>
+                  </tr>
+                </thead>
 
-            <div className="detail-investment-list">
-              {!investmentList?.length ? (
-                <div className="empty-investment">투자 내역이 없습니다.</div>
-              ) : (
-                investmentList.map((item) => (
-                  <div key={item.id} className="detail-investment-item">
-                    <span className="detail-investor-name">
-                      {item.userName}
-                    </span>
-                    <span className="detail-invest-rank">{item.rank}위</span>
-                    <span className="detail-invest-amount">
-                      {item?.amount?.toLocaleString() ?? 0}원
-                    </span>
-                    <span className="detail-invest-comment">
-                      {item.comment}
-                    </span>
-                    <div className="detail-invest-actions">
-                      {isMyInvestment(item) && (
-                        <>
-                          <Button
-                            type="Button-small"
-                            variant="Button-outline-orange"
-                            className="detail-action-button detail-action-edit"
-                            onClick={() => handleEditClick(item)}
-                            disabled={submitting}
-                          >
-                            수정
-                          </Button>
+                <tbody>
+                  <tr className="startup-table-dummy"></tr>
+                </tbody>
 
-                          <Button
-                            type="Button-small"
-                            variant="Button-outline-gray"
-                            className="detail-action-button detail-action-delete"
-                            onClick={() => {
-                              setDeleteTarget(item);
-                              setIsDeleteConfirmOpen(true);
-                            }}
-                            disabled={submitting}
-                          >
-                            삭제
-                          </Button>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                ))
-              )}
+                <tbody className="startup-table-body">
+                  {!investmentList?.length ? (
+                    <tr>
+                      <td colSpan="5">투자 내역이 없습니다.</td>
+                    </tr>
+                  ) : (
+                    investmentList.map((item) => (
+                      <tr key={item.id} className="startup-table-row">
+                        <td>{item.userName}</td>
+
+                        <td>{item.rank}위</td>
+
+                        <td>{item?.amount?.toLocaleString() ?? 0}원</td>
+
+                        <td className="startup-invest-comment">
+                          {item.comment}
+                        </td>
+
+                        <td>
+                          <div className="detail-invest-actions">
+                            {isMyInvestment(item) && (
+                              <>
+                                <Button
+                                  type="Button-small"
+                                  variant="Button-outline-orange"
+                                  className="detail-action-button detail-action-edit"
+                                  onClick={() => handleEditClick(item)}
+                                  disabled={submitting}
+                                >
+                                  수정
+                                </Button>
+
+                                <Button
+                                  type="Button-small"
+                                  variant="Button-outline-gray"
+                                  className="detail-action-button detail-action-delete"
+                                  onClick={() => {
+                                    setDeleteTarget(item);
+                                    setIsDeleteConfirmOpen(true);
+                                  }}
+                                  disabled={submitting}
+                                >
+                                  삭제
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
           </section>
 
