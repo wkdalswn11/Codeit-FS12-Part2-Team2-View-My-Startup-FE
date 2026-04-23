@@ -1,0 +1,109 @@
+.notfound-container {
+  min-height: 80vh;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  box-sizing: border-box;
+  background-color: #111;
+}
+
+.notfound-container h1 {
+  font-size: 96px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+  color: #ffffff;
+}
+
+.notfound-container h2 {
+  font-size: 32px;
+  margin: 0;
+  word-break: keep-all;
+  color: #f5f5f5;
+}
+
+.notfound-container p {
+  font-size: 16px;
+  color: #bdbdbd;
+  margin: 0 0 20px;
+  word-break: keep-all;
+}
+
+.notfound-container button {
+  padding: 12px 24px;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.notfound-container button:hover {
+  background: #f3f3f3;
+  transform: translateY(-2px);
+}
+
+/* 태블릿 */
+@media (max-width: 768px) {
+  .notfound-container {
+    min-height: 70vh;
+    padding: 32px 16px;
+    gap: 14px;
+  }
+
+  .notfound-container h1 {
+    font-size: 72px;
+  }
+
+  .notfound-container h2 {
+    font-size: 24px;
+  }
+
+  .notfound-container p {
+    font-size: 15px;
+  }
+
+  .notfound-container button {
+    width: 100%;
+    max-width: 280px;
+    font-size: 15px;
+    padding: 12px 20px;
+  }
+}
+
+/* 모바일 */
+@media (max-width: 480px) {
+  .notfound-container {
+    min-height: 65vh;
+    padding: 24px 12px;
+    gap: 12px;
+  }
+
+  .notfound-container h1 {
+    font-size: 56px;
+  }
+
+  .notfound-container h2 {
+    font-size: 20px;
+  }
+
+  .notfound-container p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .notfound-container button {
+    width: 100%;
+    max-width: 240px;
+    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: 6px;
+  }
+}
