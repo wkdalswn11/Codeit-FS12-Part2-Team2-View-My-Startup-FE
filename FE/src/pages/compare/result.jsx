@@ -159,43 +159,45 @@ const Result = () => {
               onSortChange={(value) => setCompareSort(value)}
             />
           </div>
-          <table className="startup-table mb-4">
-            <thead className="startup-table-head">
-              <tr>
-                <th>기업 명</th>
-                <th>기업 소개</th>
-                <th>카테고리</th>
-                <th>누적 투자금액</th>
-                <th>매출액</th>
-                <th>고용인원</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style={{ height: "20px" }}></tr>
-            </tbody>
-            <tbody className="startup-table-body">
-              {sortedCompareList.map((company, index) => (
-                <tr key={company.id} className="startup-table-row">
-                  <td className="company-cell">
-                    <img
-                      src={company.logo}
-                      alt={company.name}
-                      className="company-logo"
-                    />
-                    <span>{company.name}</span>
-                  </td>
-
-                  <td className="desc-cell">{company.description}</td>
-
-                  <td>{company.category || "-"}</td>
-
-                  <td>{company.baseInvestment.toLocaleString()}원</td>
-                  <td>{company.revenue.toLocaleString()}원</td>
-                  <td>{company.employeeCount || 0}명</td>
+          <div className="startup-table-wrap">
+            <table className="startup-table mb-4">
+              <thead className="startup-table-head">
+                <tr>
+                  <th>기업 명</th>
+                  <th>기업 소개</th>
+                  <th>카테고리</th>
+                  <th>누적 투자금액</th>
+                  <th>매출액</th>
+                  <th>고용인원</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <tr style={{ height: "20px" }}></tr>
+              </tbody>
+              <tbody className="startup-table-body">
+                {sortedCompareList.map((company, index) => (
+                  <tr key={company.id} className="startup-table-row">
+                    <td className="company-cell">
+                      <img
+                        src={company.logo}
+                        alt={company.name}
+                        className="company-logo"
+                      />
+                      <span>{company.name}</span>
+                    </td>
+
+                    <td className="desc-cell">{company.description}</td>
+
+                    <td>{company.category || "-"}</td>
+
+                    <td>{company.baseInvestment.toLocaleString()}원</td>
+                    <td>{company.revenue.toLocaleString()}원</td>
+                    <td>{company.employeeCount || 0}명</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
 
         <section>
@@ -206,45 +208,47 @@ const Result = () => {
               onSortChange={(value) => setRankSort(value)}
             />
           </div>
-          <table className="startup-table mb-4">
-            <thead className="startup-table-head">
-              <tr>
-                <th>순위</th>
-                <th>기업 명</th>
-                <th>기업 소개</th>
-                <th>카테고리</th>
-                <th>누적 투자금액</th>
-                <th>매출액</th>
-                <th>고용인원</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style={{ height: "20px" }}></tr>
-            </tbody>
-            <tbody className="startup-table-body">
-              {sortedRankList.map((company, index) => (
-                <tr key={company.id} className="startup-table-row">
-                  <td>{company.rank}위</td>
-                  <td className="company-cell">
-                    <img
-                      src={company.logo}
-                      alt={company.name}
-                      className="company-logo"
-                    />
-                    <span>{company.name}</span>
-                  </td>
-
-                  <td className="desc-cell">{company.description}</td>
-
-                  <td>{company.category || "-"}</td>
-
-                  <td>{company.baseInvestment.toLocaleString()}원</td>
-                  <td>{company.revenue.toLocaleString()}원</td>
-                  <td>{company.employeeCount || 0}명</td>
+          <div className="startup-table-wrap">
+            <table className="startup-table mb-4">
+              <thead className="startup-table-head">
+                <tr>
+                  <th>순위</th>
+                  <th>기업 명</th>
+                  <th>기업 소개</th>
+                  <th>카테고리</th>
+                  <th>누적 투자금액</th>
+                  <th>매출액</th>
+                  <th>고용인원</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <tr style={{ height: "20px" }}></tr>
+              </tbody>
+              <tbody className="startup-table-body">
+                {sortedRankList.map((company, index) => (
+                  <tr key={company.id} className="startup-table-row">
+                    <td>{company.rank}위</td>
+                    <td className="company-cell">
+                      <img
+                        src={company.logo}
+                        alt={company.name}
+                        className="company-logo"
+                      />
+                      <span>{company.name}</span>
+                    </td>
+
+                    <td className="desc-cell">{company.description}</td>
+
+                    <td>{company.category || "-"}</td>
+
+                    <td>{company.baseInvestment.toLocaleString()}원</td>
+                    <td>{company.revenue.toLocaleString()}원</td>
+                    <td>{company.employeeCount || 0}명</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
 
         <div className="result-button-container">

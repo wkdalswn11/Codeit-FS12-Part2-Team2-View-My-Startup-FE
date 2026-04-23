@@ -43,8 +43,15 @@
   margin-bottom: var(--mb-4);
 }
 
+.startup-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .startup-table {
   width: 100%;
+  min-width: 900px;
   border-collapse: separate;
   border-spacing: 0;
   border-radius: 12px;
@@ -137,4 +144,11 @@ tbody tr:first-child td:last-child {
 
 .startup-table-dummy {
   height: 20px;
+}
+
+.startup-invest-comment {
+  white-space: pre-line;
+  word-break: break-word !important;
+  text-align: left !important;
+  max-width: 300px;
 }
