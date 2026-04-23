@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const List = ({ companyList }) => {
+  const navigate = useNavigate();
   return (
     <div className="startup-table-wrap">
       <table className="startup-table mb-4">
@@ -26,7 +26,11 @@ const List = ({ companyList }) => {
             </tr>
           ) : (
             companyList.map((company) => (
-              <tr key={company.id} className="startup-table-row">
+              <tr
+                key={company.id}
+                className="startup-table-row cursor-pointer"
+                onClick={() => navigate(`/companies/${company.id}`)}
+              >
                 <td>{company.rank}위</td>
 
                 <td className="company-cell">
@@ -35,9 +39,7 @@ const List = ({ companyList }) => {
                     alt={company.name}
                     className="company-logo"
                   />
-                  <span>
-                    <Link to={`/companies/${company.id}`}>{company.name}</Link>
-                  </span>
+                  <span>{company.name}</span>
                 </td>
 
                 <td className="desc-cell">{company.description}</td>

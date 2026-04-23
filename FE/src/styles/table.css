@@ -152,3 +152,7 @@ tbody tr:first-child td:last-child {
   text-align: left !important;
   max-width: 300px;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

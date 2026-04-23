@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const List = ({ compareList }) => {
+  const navigate = useNavigate();
   return (
     <div className="startup-table-wrap">
       <table className="startup-table mb-4">
@@ -24,7 +25,11 @@ const List = ({ compareList }) => {
             </tr>
           ) : (
             compareList.map((compare) => (
-              <tr key={compare.id} className="startup-table-row">
+              <tr
+                key={compare.id}
+                className="startup-table-row cursor-pointer"
+                onClick={() => navigate(`/companies/${compare.id}`)}
+              >
                 <td>{compare.rank}위</td>
 
                 <td className="company-cell">
