@@ -47,3 +47,7 @@ export async function deleteCompanyInvestment({ userId, investmentId }) {
     method: "DELETE",
   });
 }
+
+export async function getCompanyInvestment({ userId, investmentId }) {
+  return request(`/users/${userId}/investments/${investmentId}`);
+}
