@@ -1,9 +1,10 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const List = ({ investmentList }) => {
   const sortedList = [...investmentList].sort(
     (a, b) => b.totalInvestment - a.totalInvestment,
   );
+  const navigate = useNavigate();
   return (
     <>
       <div className="startup-table-wrap">
@@ -28,7 +29,11 @@ const List = ({ investmentList }) => {
               </tr>
             ) : (
               sortedList.map((investment) => (
-                <tr key={investment.id} className="startup-table-row">
+                <tr
+                  key={investment.id}
+                  className="startup-table-row cursor-pointer"
+                  onClick={() => navigate(`/companies/${investment.id}`)}
+                >
                   <td>{investment.rank}위</td>
 
                   <td className="company-cell">
@@ -44,7 +49,10 @@ const List = ({ investmentList }) => {
 
                   <td>{investment.category}</td>
 
-                  <td>{investment?.siteInvestment?.toLocaleString()} 원</td>
+                  <td>
+                    {Number(investment?.siteInvestment || 0).toLocaleString()}{" "}
+                    원
+                  </td>
 
                   <td>{investment?.baseInvestment?.toLocaleString()} 원</td>
                 </tr>
