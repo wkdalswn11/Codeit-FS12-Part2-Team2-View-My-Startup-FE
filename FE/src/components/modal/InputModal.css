@@ -205,3 +205,9 @@ input[type="number"] {
 .is-hidden {
   display: none;
 }
+
+/* 나중에 필요하면 추가하세요! */
+.InputModal-read-only-input {
+  background-color: black; /* 살짝 회색빛으로 */
+  cursor: not-allowed; /* 마우스 올리면 금지 표시 */
+}
