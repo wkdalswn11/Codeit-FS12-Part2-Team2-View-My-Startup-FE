@@ -2,10 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/result.css";
 import Button from "../../components/ui/Button";
-import ListSkeleton from "../../components/ui/ListSkeleton";
 import SelectedList from "../../components/search/SelectedList";
 import useUserStore from "../../store/userStore";
 import ResultSkeleton from "../../components/ui/ResultSkeleton";
+import InputModal from "../../components/modal/InputModal";
+import { createCompanyInvestment } from "../../services/investmentApi";
+import AlertModal from "../../components/modal/AlertModal";
 
 const Result = () => {
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -18,8 +20,14 @@ const Result = () => {
   const [rankList, setRankList] = useState([]);
 
   const [compareSort, setCompareSort] = useState("baseInvestment_desc");
-  const [rankSort, setRankSort] = useState("baseInvestment_desc");
-  const companyId = compareList[0]?.id;
+  const [rankSort, setRankSort] = useState("revenue_desc");
+
+  const [submitting, setSubmitting] = useState(false);
+
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const targetCompany = compareList[0];
 
   //카드부분
   const renderSelectedCard = () => {
@@ -27,7 +35,7 @@ const Result = () => {
 
     if (compareList.length === 0) {
       return (
-        <div className="custom-empty-card">
+        <div className="result-custom-empty-card">
           <p>아직 선택된 기업이 없습니다.</p>
         </div>
       );
@@ -119,15 +127,53 @@ const Result = () => {
     }
   };
 
-  const handleGoToDetail = () => {
-    // compareList의 첫 번째 기업(카드에 표시된 기업)을 가져옵니다.
-    const myCompany = compareList.length > 0 ? compareList[0] : null;
+  // 나의 기업에 투자하기
+  const handleInvestmentClick = async () => {
+    if (!user || !USER_ID) {
+      setAlertMessage("로그인 후 이용 가능합니다.");
+      setAlertOpen(true);
+      return;
+    }
 
-    if (myCompany && myCompany.id) {
-      // 상세 페이지 경로가 /detail/:id 인 경우
-      navigate(`/companies/${companyId}`);
-    } else {
-      alert("선택된 기업이 없습니다. 기업을 먼저 선택해주세요!");
+    try {
+      const response = await fetch(
+        `${BASE_URL}/users/${USER_ID}/investments/${targetCompany.id}`,
+      );
+
+      if (response.ok) {
+        navigate(`/companies/${targetCompany.id}`);
+      } else {
+        setIsModalOpen(true);
+      }
+    } catch (error) {
+      setIsModalOpen(true);
+    }
+  };
+
+  // InputModal에서 호출할 실제 투자 API 로직 (Detail.jsx의 handleCreateInvestment 참고)
+  const handleInvestSubmit = async (data) => {
+    try {
+      setSubmitting(true);
+      const response = await fetch(`${BASE_URL}/users/${USER_ID}/investments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: Number(data.amount),
+          comment: data.comment,
+        }),
+      });
+
+      if (!response.ok) throw new Error("투자 요청 실패");
+
+      setAlertMessage("투자가 완료되었습니다!");
+      setAlertOpen(true);
+      setIsModalOpen(false);
+      navigate(`/companies/${targetCompany.id}`);
+    } catch (err) {
+      setAlertMessage(err.message);
+      setAlertOpen(true);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -203,10 +249,13 @@ const Result = () => {
         <section>
           <div className="result-section-header">
             <h2 className="result-section-title">기업 순위 확인하기</h2>
-            <SelectedList
-              variant="INVESTMENT"
-              onSortChange={(value) => setRankSort(value)}
-            />
+            {!loading && (
+              <SelectedList
+                variant="INVESTMENT"
+                value={rankSort}
+                onSortChange={(value) => setRankSort(value)}
+              />
+            )}
           </div>
           <div className="startup-table-wrap">
             <table className="startup-table mb-4">
@@ -255,12 +304,28 @@ const Result = () => {
           <Button
             type="Button-large"
             variant="Button-primary"
-            onClick={handleGoToDetail}
+            onClick={handleInvestmentClick}
           >
             나의 기업에 투자하기
           </Button>
         </div>
       </main>
+      {isModalOpen && (
+        <InputModal
+          onClose={() => setIsModalOpen(false)}
+          company={targetCompany}
+          user={user}
+          onSubmit={handleInvestSubmit} // API 로직을 부모(Result)에서 처리하도록 전달
+          submitting={submitting}
+        />
+      )}
+
+      {/* 알림 모달 */}
+      <AlertModal
+        isOpen={alertOpen}
+        message={alertMessage}
+        onClose={() => setAlertOpen(false)}
+      />
     </div>
   );
 };

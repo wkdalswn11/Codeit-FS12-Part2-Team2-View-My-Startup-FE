@@ -2,6 +2,7 @@
   background-color: #131313;
   color: #fff;
   min-height: 100vh;
+  padding-top: 60px;
 }
 
 .result-container {
@@ -31,11 +32,6 @@
   padding: 60px 0;
   width: 100%;
 }
-.result-empty-selection-box {
-  text-align: center;
-  padding: 40px;
-  border-radius: 16px;
-}
 
 /* 선택된 기업 카드 스타일 */
 .result-custom-selected-card {
@@ -52,7 +48,7 @@
 .result-card-logo-wrapper {
   width: 100px;
   height: 100px;
-  background-color: #fff;
+
   border-radius: 50%;
   overflow: hidden;
   display: flex;
@@ -62,8 +58,8 @@
 }
 
 .result-card-main-logo {
-  width: 80%;
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 

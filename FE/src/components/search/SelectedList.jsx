@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/SelectedList.css";
 
 // 상수로 옵션 리스트 정의 (컴포넌트 밖에서 관리)
@@ -34,10 +34,24 @@ const SORT_VARIANTS = {
   ],
 };
 
-function SelectedList({ variant = "INVESTMENT", onSortChange }) {
+function SelectedList({ variant = "INVESTMENT", onSortChange, value }) {
   const options = SORT_VARIANTS[variant] || SORT_VARIANTS.INVESTMENT;
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(options[0]);
+
+  // ✅ 초기 상태를 정할 때, 부모가 준 value가 있으면 그에 맞는 라벨을 먼저 찾습니다.
+  const [selected, setSelected] = useState(() => {
+    return options.find((opt) => opt.value === value) || options[0];
+  });
+
+  // ✅ [중요] 부모(Result.jsx)의 상태(rankSort)가 바뀌면 이 컴포넌트의 글자도 강제로 바꿉니다.
+  useEffect(() => {
+    if (value) {
+      const matched = options.find((opt) => opt.value === value);
+      if (matched) {
+        setSelected(matched);
+      }
+    }
+  }, [value, options]);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -49,13 +63,11 @@ function SelectedList({ variant = "INVESTMENT", onSortChange }) {
 
   return (
     <div className="SelectedList-container">
-      {/* 선택된 영역 */}
       <div className="SelectedList-box" onClick={toggleDropdown}>
         <span>{selected.label}</span>
         <span className={`arrow ${isOpen ? "up" : ""}`}>⌵</span>
       </div>
 
-      {/* 드롭다운 리스트 */}
       {isOpen && (
         <ul className="SelectedList-list">
           {options.map((opt) => (
