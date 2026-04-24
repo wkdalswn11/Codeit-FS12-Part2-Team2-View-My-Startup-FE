@@ -27,6 +27,9 @@ function Header() {
           <NavLink to="/investments" className="header-menu-name">
             투자 현황
           </NavLink>
+          <NavLink to="/trend" className="header-menu-name">
+            트렌드 현황
+          </NavLink>
         </div>
       </div>
     </header>

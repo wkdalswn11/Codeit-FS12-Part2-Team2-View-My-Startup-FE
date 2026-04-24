@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useDebounce from "./useDebounce";
 import { getCompanies } from "../services/companyApi";
 
-function useCompanyList(initialSort) {
+function useCompanyList(initialSort, fetchApi = getCompanies) {
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,7 +32,7 @@ function useCompanyList(initialSort) {
         setLoading(true);
         setError(null);
 
-        const result = await getCompanies({
+        const result = await fetchApi({
           page: currentPage,
           limit: 10,
           sort,
@@ -57,7 +57,7 @@ function useCompanyList(initialSort) {
     };
 
     fetchData();
-  }, [currentPage, sort, debouncedSearch]);
+  }, [currentPage, sort, debouncedSearch, fetchApi]);
 
   return {
     loading,

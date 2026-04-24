@@ -10,6 +10,7 @@ import Detail from "./pages/company/detail";
 import CompareSelectPage from "./pages/compare/CompareSelectPage";
 import Result from "./pages/compare/result";
 import NotFound from "./pages/NotFound";
+import TrendPage from "./pages/trend/TrendPage";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/investments" element={<InvestmentPage />} />
         <Route path="/companies/:id" element={<Detail />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/trend" element={<TrendPage />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
