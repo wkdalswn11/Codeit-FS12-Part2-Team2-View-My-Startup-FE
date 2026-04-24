@@ -44,13 +44,12 @@ const SORT_VARIANTS = {
     },
   ],
   CATEGORY: [
-    { label: "전체", value: "TOTAL" },
+    { label: "전체", value: "" },
     { label: "IT", value: "IT" },
     { label: "FINANCE", value: "FINANCE" },
     { label: "HEALTHCARE", value: "HEALTHCARE" },
     { label: "EDUCATION", value: "EDUCATION" },
     { label: "ECOMMERCE", value: "ECOMMERCE" },
-    { label: "OTHER", value: "OTHER" },
   ],
 };
 
