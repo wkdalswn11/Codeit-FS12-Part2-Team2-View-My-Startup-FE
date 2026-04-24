@@ -70,13 +70,6 @@ const InputModal = ({ onClose, company, user, onSubmit, submitting }) => {
         </div>
 
         <div className="form">
-          <p className="form-text">투자자 이름</p>
-          <input
-            value={user?.name || ""}
-            readOnly
-            className="form-input InputModal-read-only-input"
-          />
-
           <p className="form-text">투자 금액</p>
           <input
             type="number"

@@ -61,50 +61,51 @@ const Result = () => {
     );
   };
 
-  const getSortedData = (data, currentSortValue) => {
-    if (!data || data.length === 0) return [];
-
-    return [...data].sort((a, b) => {
-      // "baseInvestment_desc" -> ["baseInvestment", "desc"]로 분리
-      const [column, order] = currentSortValue.split("_");
-
-      const valA = a[column] || 0;
-      const valB = b[column] || 0;
-
-      // 내림차순(desc)이면 큰 값이 위로, 아니면 작은 값이 위로
-      return order === "desc" ? valB - valA : valA - valB;
-    });
-  };
-
-  const sortedCompareList = getSortedData(compareList, compareSort);
-  const sortedRankList = getSortedData(rankList, rankSort);
-
   // API 호출 함수
   const fetchData = useCallback(async () => {
+    if (!USER_ID) return;
+
     try {
       setLoading(true);
+      // 백엔드 명세에 맞춰 sort 파라미터를 추가합니다.
+      const [resCompare, resRank] = await Promise.all([
+        fetch(`${BASE_URL}/users/${USER_ID}/selections`),
+        fetch(
+          `${BASE_URL}/users/${USER_ID}/selections/ranking?sort=${rankSort}`,
+        ),
+      ]);
 
-      const resCompare = await fetch(`${BASE_URL}/users/${USER_ID}/selections`);
-      if (!resCompare.ok) throw new Error("비교 리스트 로드 실패");
-      const resultCompare = await resCompare.json();
+      if (!resCompare.ok || !resRank.ok) throw new Error("데이터 로드 실패");
+
+      const [resultCompare, resultRank] = await Promise.all([
+        resCompare.json(),
+        resRank.json(),
+      ]);
+
+      // 백엔드에서 정렬해준 순서 그대로 저장
       setCompareList(resultCompare.data || []);
-
-      const resRank = await fetch(
-        `${BASE_URL}/users/${USER_ID}/selections/ranking`,
-      );
-      if (!resRank.ok) throw new Error("전체 순위 로드 실패");
-      const resultRank = await resRank.json();
       setRankList(resultRank.data || []);
     } catch (error) {
       console.error("데이터 로드 중 에러 발생:", error);
     } finally {
       setLoading(false);
     }
-  }, [USER_ID]);
+  }, [USER_ID, BASE_URL, compareSort, rankSort]); // sort 상태가 바뀌면 다시 실행됨
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  // 비교 결과 확인하기
+  const getSortedCompareList = () => {
+    if (!compareList.length) return [];
+    const [column, order] = compareSort.split("_");
+    return [...compareList].sort((a, b) => {
+      const valA = a[column] || 0;
+      const valB = b[column] || 0;
+      return order === "desc" ? valB - valA : valA - valB;
+    });
+  };
 
   const handleCompanySelect = async (company) => {
     try {
@@ -221,7 +222,7 @@ const Result = () => {
                 <tr style={{ height: "20px" }}></tr>
               </tbody>
               <tbody className="startup-table-body">
-                {sortedCompareList.map((company, index) => (
+                {getSortedCompareList().map((company, index) => (
                   <tr key={company.id} className="startup-table-row">
                     <td className="company-cell">
                       <img
@@ -274,7 +275,7 @@ const Result = () => {
                 <tr style={{ height: "20px" }}></tr>
               </tbody>
               <tbody className="startup-table-body">
-                {sortedRankList.map((company, index) => (
+                {rankList.map((company, index) => (
                   <tr key={company.id} className="startup-table-row">
                     <td>{company.rank}위</td>
                     <td className="company-cell">
