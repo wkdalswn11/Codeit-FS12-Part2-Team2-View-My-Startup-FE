@@ -62,7 +62,6 @@ const CompareSelectPage = () => {
     try {
       await deleteMyCompany(USER_ID, myCompany.id);
       setMyCompany(null);
-      setCompareCompanies([]);
     } catch (err) {
       console.error(err);
     }
