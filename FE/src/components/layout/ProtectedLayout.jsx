@@ -1,5 +1,4 @@
 import { Navigate } from "react-router-dom";
-import { getStoredUser } from "../../pages/auth/Auth";
 import ListLayout from "./ListLayout";
 import useUserStore from "../../store/userStore";
 

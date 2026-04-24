@@ -12,6 +12,7 @@ function ListLayout({
   search,
   onSearchChange,
   onSearchSubmit,
+  showSearch = true,
 }) {
   return (
     <div className="layout-wrapper">
@@ -20,11 +21,13 @@ function ListLayout({
           <h2 className="layout-list-title">{title}</h2>
 
           <div className="layout-list-controls">
-            <SearchBar
-              value={search}
-              onChange={onSearchChange}
-              onSubmit={onSearchSubmit}
-            />
+            {showSearch && (
+              <SearchBar
+                value={search}
+                onChange={onSearchChange}
+                onSubmit={onSearchSubmit}
+              />
+            )}
 
             <SelectedList variant={sortVariant} onSortChange={onSortChange} />
           </div>
