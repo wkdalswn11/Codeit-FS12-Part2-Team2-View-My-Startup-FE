@@ -5,6 +5,7 @@ import "../../styles/pagination.css";
 import ListSkeleton from "../../components/ui/ListSkeleton";
 import ProtectedLayout from "../../components/layout/ProtectedLayout";
 import useCompanyList from "../../hook/useListPage";
+import SelectedList from "../../components/search/SelectedList";
 
 const CompanyPage = () => {
   const {
@@ -13,6 +14,8 @@ const CompanyPage = () => {
     meta,
     setCurrentPage,
     setSort,
+    category,
+    setCategory,
     search,
     setSearch,
     handleSearchSubmit,
@@ -24,6 +27,13 @@ const CompanyPage = () => {
       sortVariant="INVESTMENT"
       onSortChange={setSort}
       search={search}
+      categoryElement={
+        <SelectedList
+          variant="CATEGORY"
+          value={category}
+          onSortChange={setCategory}
+        />
+      }
       onSearchChange={setSearch}
       onSearchSubmit={handleSearchSubmit}
     >

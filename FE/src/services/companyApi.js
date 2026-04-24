@@ -16,9 +16,10 @@ export async function getCompanies({
   limit = 10,
   sort,
   keyword = "",
+  category = "",
 }) {
   return request(
-    `/companies?page=${page}&limit=${limit}&sort=${sort}&keyword=${keyword}`,
+    `/companies?page=${page}&limit=${limit}&sort=${sort}&keyword=${keyword}&category=${category}`,
   );
 }
 
