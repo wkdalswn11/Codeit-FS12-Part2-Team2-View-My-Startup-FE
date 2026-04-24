@@ -13,6 +13,7 @@ function ListLayout({
   onSearchChange,
   onSearchSubmit,
   showSearch = true,
+  categoryElement,
 }) {
   return (
     <div className="layout-wrapper">
@@ -28,6 +29,7 @@ function ListLayout({
                 onSubmit={onSearchSubmit}
               />
             )}
+            {categoryElement && categoryElement}
 
             <SelectedList variant={sortVariant} onSortChange={onSortChange} />
           </div>

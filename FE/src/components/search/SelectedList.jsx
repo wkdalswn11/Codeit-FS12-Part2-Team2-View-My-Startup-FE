@@ -43,6 +43,15 @@ const SORT_VARIANTS = {
       value: "Month",
     },
   ],
+  CATEGORY: [
+    { label: "전체", value: "TOTAL" },
+    { label: "IT", value: "IT" },
+    { label: "FINANCE", value: "FINANCE" },
+    { label: "HEALTHCARE", value: "HEALTHCARE" },
+    { label: "EDUCATION", value: "EDUCATION" },
+    { label: "ECOMMERCE", value: "ECOMMERCE" },
+    { label: "OTHER", value: "OTHER" },
+  ],
 };
 
 function SelectedList({ variant = "INVESTMENT", onSortChange, value }) {

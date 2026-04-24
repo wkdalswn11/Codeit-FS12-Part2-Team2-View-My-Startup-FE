@@ -7,6 +7,7 @@ function useCompanyList(initialSort, fetchApi = getCompanies) {
   const [list, setList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSort] = useState(initialSort);
+  const [category, setCategory] = useState("");
   const [search, setSearch] = useState("");
   const [error, setError] = useState(null);
   const debouncedSearch = useDebounce(search, 500);
@@ -24,7 +25,7 @@ function useCompanyList(initialSort, fetchApi = getCompanies) {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedSearch, sort]);
+  }, [debouncedSearch, sort, category]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +38,7 @@ function useCompanyList(initialSort, fetchApi = getCompanies) {
           limit: 10,
           sort,
           keyword: debouncedSearch,
+          category,
         });
 
         setList(result.data || []);
@@ -57,13 +59,15 @@ function useCompanyList(initialSort, fetchApi = getCompanies) {
     };
 
     fetchData();
-  }, [currentPage, sort, debouncedSearch, fetchApi]);
+  }, [currentPage, sort, debouncedSearch, category, fetchApi]);
 
   return {
     loading,
     list,
     currentPage,
     setCurrentPage,
+    category,
+    setCategory,
     sort,
     setSort,
     search,
