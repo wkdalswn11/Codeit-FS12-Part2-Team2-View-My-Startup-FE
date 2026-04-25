@@ -146,14 +146,20 @@ const Detail = () => {
       return;
     }
 
+    if (!editForm.comment.trim()) {
+      setAlertMessage("투자 코멘트를 입력해주세요.");
+      setAlertOpen(true);
+      return;
+    }
+
     try {
       setSubmitting(true);
 
       await updateCompanyInvestment({
         userId: USER_ID,
-        investmentId: selectedInvestment.id,
+        companyId: Number(id),
         data: {
-          amount: Number(editForm.amount),
+          amount: editForm.amount,
           comment: editForm.comment,
         },
       });
@@ -178,8 +184,16 @@ const Detail = () => {
       return;
     }
 
-    if (!investForm.amount || Number(investForm.amount) <= 0) {
+    const amount = Number(investForm.amount);
+
+    if (!investForm.amount || amount <= 0) {
       setAlertMessage("투자 금액을 입력해주세요.");
+      setAlertOpen(true);
+      return;
+    }
+
+    if (!investForm.comment.trim()) {
+      setAlertMessage("투자 코멘트를 입력해주세요.");
       setAlertOpen(true);
       return;
     }
@@ -191,11 +205,10 @@ const Detail = () => {
         companyId: id,
         data: {
           userId: USER_ID,
-          amount: Number(investForm.amount),
+          amount: investForm.amount,
           comment: investForm.comment,
         },
       });
-
       setIsInvestModalOpen(false);
       setInvestForm({
         amount: "",
@@ -204,7 +217,7 @@ const Detail = () => {
       await fetchData();
     } catch (err) {
       console.error(err);
-      setAlertMessage("투자에 실패했습니다.");
+      setAlertMessage(err.message || "투자에 실패했습니다.");
       setAlertOpen(true);
     } finally {
       setSubmitting(false);
@@ -228,7 +241,7 @@ const Detail = () => {
       );
       await deleteCompanyInvestment({
         userId: USER_ID,
-        investmentId: deleteTarget.id,
+        companyId: Number(id),
       });
 
       setDeleteTarget(null);
@@ -265,14 +278,14 @@ const Detail = () => {
             <div className="detail-card">
               <span className="detail-card-label">누적 투자 금액</span>
               <strong className="detail-card-value">
-                {companyDetail?.baseInvestment?.toLocaleString() ?? 0} 원
+                {Number(companyDetail?.baseInvestment ?? 0).toLocaleString()} 원
               </strong>
             </div>
 
             <div className="detail-card">
               <span className="detail-card-label">매출액</span>
               <strong className="detail-card-value">
-                {companyDetail?.revenue?.toLocaleString() ?? 0} 원
+                {Number(companyDetail?.revenue ?? 0).toLocaleString()} 원
               </strong>
             </div>
 
@@ -306,17 +319,20 @@ const Detail = () => {
               </Button>
             </div>
 
-            <div className="detail-investment-controls">
-              <SearchBar
-                value={investmentSearch}
-                onChange={setInvestmentSearch}
-                onSubmit={() => setCurrentPage(1)}
-              />
-            </div>
+            <div className="detail-investment-toolbar">
+              <h3 className="detail-investment-total">
+                총 {Number(companyDetail?.siteInvestment ?? 0).toLocaleString()}{" "}
+                원
+              </h3>
 
-            <h3 className="detail-investment-total">
-              총 {companyDetail?.siteInvestment?.toLocaleString() ?? 0} 원
-            </h3>
+              <div className="detail-investment-controls">
+                <SearchBar
+                  value={investmentSearch}
+                  onChange={setInvestmentSearch}
+                  onSubmit={() => setCurrentPage(1)}
+                />
+              </div>
+            </div>
 
             <div className="startup-table-wrap">
               <table className="startup-table mb-4">
@@ -346,7 +362,7 @@ const Detail = () => {
 
                         <td>{item.rank}위</td>
 
-                        <td>{item?.amount?.toLocaleString() ?? 0}원</td>
+                        <td>{Number(item?.amount ?? 0).toLocaleString()}원</td>
 
                         <td className="startup-invest-comment">
                           {item.comment}
