@@ -44,7 +44,9 @@ const TrendList = ({ companyList }) => {
 
                 <td className="desc-cell">{company.description}</td>
                 <td>{company.category || "-"}</td>
-                <td>{company.baseInvestment?.toLocaleString() || 0}원</td>
+                <td>
+                  {Number(company.siteInvestment)?.toLocaleString() || 0}원
+                </td>
                 <td>{company.recentInvestmentCount}</td>
               </tr>
             ))
