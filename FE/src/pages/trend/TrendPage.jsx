@@ -18,6 +18,8 @@ const TrendPage = () => {
     handleSearchSubmit,
   } = useListPage("7days", getTrends);
 
+  console.log(meta);
+
   return (
     <ProtectedLayout
       title="트렌드 현황"

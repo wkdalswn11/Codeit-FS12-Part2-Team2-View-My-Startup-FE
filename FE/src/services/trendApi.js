@@ -12,5 +12,7 @@ export async function request(endpoint, options = {}) {
 }
 
 export async function getTrends({ page = 1, limit = 10, sort }) {
-  return request(`/companies/trending?days=${sort}page=${page}&limit=${limit}`);
+  return request(
+    `/companies/trending?days=${sort}&page=${page}&limit=${limit}`,
+  );
 }
