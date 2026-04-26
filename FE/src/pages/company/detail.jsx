@@ -63,7 +63,7 @@ const Detail = () => {
         getCompanyInvestments({
           id,
           page: currentPage,
-          limit: 10,
+          limit: 5,
           keyword: debouncedInvestmentSearch,
         }),
       ]);

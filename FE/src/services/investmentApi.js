@@ -11,6 +11,8 @@ export async function request(endpoint, options = {}) {
       data?.message || data?.error || `요청에 실패했습니다. (${res.status})`,
     );
   }
+
+  return data;
 }
 
 export async function getCompanyInvestments({

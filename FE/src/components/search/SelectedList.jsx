@@ -33,11 +33,11 @@ const SORT_VARIANTS = {
     },
   ],
   TREND_SELECTION: [
-    { label: "최근 1일", value: "Today" },
     {
       label: "최근 7일",
       value: "7days",
     },
+    { label: "최근 1일", value: "Today" },
     {
       label: "최근 30일",
       value: "Month",
