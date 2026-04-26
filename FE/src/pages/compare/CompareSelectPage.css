@@ -203,9 +203,6 @@
 }
 
 .compare-page-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   max-width: 1040px;
   margin: 0 auto;
   padding: 48px 24px 80px;
@@ -224,7 +221,7 @@
 
 .my-company-section-top {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
 

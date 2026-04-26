@@ -121,10 +121,9 @@ const CompareSelectPage = () => {
     <ProtectedDetailLayout>
       <div className="compare-page">
         <div className="compare-page-container">
-          <h2 className="compare-page-title">나의 기업을 선택해 주세요!</h2>
-
           {!myCompany ? (
             <>
+              <h2 className="compare-page-title">나의 기업을 선택해 주세요!</h2>
               <CompareCard
                 variant="add"
                 onClick={() => setModalMode("favorite")}
@@ -143,6 +142,9 @@ const CompareSelectPage = () => {
             <>
               <section className="my-company-section">
                 <div className="my-company-section-top">
+                  <h2 className="compare-page-title">
+                    나의 기업을 선택해 주세요!
+                  </h2>
                   <Button
                     type="Button-medium"
                     variant="Button-primary"
