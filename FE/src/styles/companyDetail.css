@@ -118,12 +118,19 @@
 }
 
 .detail-investment-total {
-  margin: 0 0 18px;
+  margin: 0;
   padding: 0;
-  border-top: none;
   color: #ffffff;
   font-size: 24px;
   font-weight: 700;
+}
+
+.detail-investment-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
 }
 
 .detail-table-header {
@@ -453,15 +460,20 @@
     gap: 16px;
   }
 
+  .detail-investment-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .detail-investment-controls {
     width: 100%;
     justify-content: stretch;
+    margin-bottom: 0;
   }
 
   .detail-investment-controls .layout-search-bar {
     width: 100%;
   }
-
   .detail-table-header {
     display: none;
   }

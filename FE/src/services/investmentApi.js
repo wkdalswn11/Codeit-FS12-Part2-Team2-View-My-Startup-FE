@@ -4,11 +4,13 @@ export async function request(endpoint, options = {}) {
   const res = await fetch(`${BASE_URL}${endpoint}`, options);
   const text = await res.text();
 
-  if (!res.ok) {
-    throw new Error(`데이터 요청 실패: ${res.status}`);
-  }
+  const data = text ? JSON.parse(text) : null;
 
-  return JSON.parse(text);
+  if (!res.ok) {
+    throw new Error(
+      data?.message || data?.error || `요청에 실패했습니다. (${res.status})`,
+    );
+  }
 }
 
 export async function getCompanyInvestments({
@@ -32,8 +34,8 @@ export async function createCompanyInvestment({ companyId, data }) {
   });
 }
 
-export async function updateCompanyInvestment({ userId, investmentId, data }) {
-  return request(`/users/${userId}/investments/${investmentId}`, {
+export async function updateCompanyInvestment({ userId, companyId, data }) {
+  return request(`/users/${userId}/investments/${companyId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -42,8 +44,8 @@ export async function updateCompanyInvestment({ userId, investmentId, data }) {
   });
 }
 
-export async function deleteCompanyInvestment({ userId, investmentId }) {
-  return request(`/users/${userId}/investments/${investmentId}`, {
+export async function deleteCompanyInvestment({ userId, companyId }) {
+  return request(`/users/${userId}/investments/${companyId}`, {
     method: "DELETE",
   });
 }

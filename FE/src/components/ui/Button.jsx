@@ -11,7 +11,11 @@ function Button({
   ...rest
 }) {
   return (
-    <button className={`Button-btn ${type} ${variant} ${className}`} {...rest}>
+    <button
+      type={htmlType}
+      className={`Button-btn ${type} ${variant} ${className}`}
+      {...rest}
+    >
       {icon && <span>{icon}</span>}
       {children}
     </button>
