@@ -14,6 +14,7 @@ import FormField from "../../components/ui/FormField";
 import {
   createCompanyInvestment,
   deleteCompanyInvestment,
+  getCompanyInvestment,
   getCompanyInvestments,
   updateCompanyInvestment,
 } from "../../services/investmentApi";
@@ -32,6 +33,7 @@ const Detail = () => {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [isInvestModalOpen, setIsInvestModalOpen] = useState(false);
+  const [hasMyInvestment, setHasMyInvestment] = useState(null);
   const [investForm, setInvestForm] = useState({
     amount: "",
     comment: "",
@@ -101,7 +103,27 @@ const Detail = () => {
     return item.userName === user.name || item.userEmail === user.email;
   };
 
-  const hasMyInvestment = investmentList.some((item) => isMyInvestment(item));
+  useEffect(() => {
+    const checkMyInvestment = async () => {
+      if (!USER_ID || !id) {
+        setHasMyInvestment(false);
+        return;
+      }
+
+      try {
+        const myInvestment = await getCompanyInvestment({
+          userId: USER_ID,
+          companyId: Number(id),
+        });
+
+        setHasMyInvestment(!!myInvestment?.data);
+      } catch (error) {
+        setHasMyInvestment(false);
+      }
+    };
+
+    checkMyInvestment();
+  }, [USER_ID, id, investmentList]);
 
   const handleEditClick = (item) => {
     setSelectedInvestment(item);
@@ -313,7 +335,7 @@ const Detail = () => {
                 type="Button-large"
                 variant="Button-primary"
                 onClick={() => setIsInvestModalOpen(true)}
-                disabled={hasMyInvestment}
+                disabled={hasMyInvestment !== false}
               >
                 기업 투자하기
               </Button>
